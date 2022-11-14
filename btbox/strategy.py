@@ -17,7 +17,7 @@ class Strategy:
         return self._timeline
 
     @property
-    def broker(self):
+    def broker(self) -> Broker:
         return self._broker
 
     def sync(self,
@@ -30,5 +30,5 @@ class Strategy:
     def step(self,
              i: int,
              now: datetime,
-             broker: Broker):
+             broker: Broker) -> None:
         pass
