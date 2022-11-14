@@ -1,4 +1,5 @@
 import pandas as pd
+from btbox.datasource import DataSource
 from btbox.market import Market
 from btbox.strategy import Strategy
 from btbox.broker import Broker
@@ -7,15 +8,10 @@ from typing import Type
 
 class Backtest:
     def __init__(self,
-                 strategy: Strategy,
-                 market: Market,
-                 broker: Broker):
+                 strategy: Strategy):
         assert isinstance(strategy, Strategy)
-        assert isinstance(market, Market)
-        assert isinstance(broker, Broker)
         self._strategy = strategy
-        self._market = market
-        self._broker = broker
+        self._broker = self._strategy.broker
 
     def run(self):
         # timeline loop
@@ -33,10 +29,11 @@ class Backtest:
 
 
 # helper
-def create(Strategy: Type[Strategy],
-           data: pd.DataFrame) -> Backtest:
-    strategy = Strategy()
-    market = Market(data)
-    broker = Broker()
-    backtest = Backtest(strategy, market, broker)
+def create(CustomStrategy: Type[Strategy],
+           dataframe: pd.DataFrame) -> Backtest:
+    datasource = DataSource(dataframe)
+    market = Market(datasource)
+    broker = Broker(market)
+    strategy = CustomStrategy(broker)
+    backtest = Backtest(strategy)
     return backtest

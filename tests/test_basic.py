@@ -34,6 +34,6 @@ def test3():
 def test4():
     market = btbox.market.Market(ohlcv)
     broker = btbox.broker.Broker()
-    strategy = Algo(market, broker, ohlcv)
+    strategy = Algo(market, broker)
     backtest = btbox.backtest.Backtest(strategy, market, broker)
     backtest.run()

@@ -1,16 +1,14 @@
-import pandas as pd
-from typing import List
 from datetime import datetime
+from btbox.datasource import DataSource
+from typing import List
 
 
 class Market:
     def __init__(self,
-                 data: pd.DataFrame) -> None:
-        # check
-        assert isinstance(data, pd.DataFrame)
-        self._data = data
-        self._timeline = self._data.index
+                 datasource: DataSource) -> None:
+        self._datasource = datasource
+        self._timeline = self._datasource.timeline
 
     @property
     def timeline(self) -> List[datetime]:
-        return self._timeline.to_list()
+        return self._timeline

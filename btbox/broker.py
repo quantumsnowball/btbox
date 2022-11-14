@@ -1,8 +1,11 @@
 from typing import Dict
+from btbox.market import Market
 
 
 class Broker:
-    def __init__(self) -> None:
+    def __init__(self,
+                 market: Market) -> None:
+        self._market = market
         self._cash: float = 0
         self._positions: Dict[str, float] = {}
 
