@@ -1,8 +1,10 @@
+import pytest
 import pandas as pd
 import btbox
 import btbox.backtest
 import btbox.strategy
 import btbox.market
+import btbox.broker
 
 
 class Algo(btbox.Strategy):
@@ -33,5 +35,6 @@ def test3():
 def test4():
     strategy = Algo()
     market = btbox.market.Market(ohlcv)
-    backtest = btbox.backtest.Backtest(strategy, market)
+    broker = btbox.broker.Broker()
+    backtest = btbox.backtest.Backtest(strategy, market, broker)
     backtest.run()

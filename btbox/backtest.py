@@ -1,8 +1,13 @@
 from btbox.market import Market
+from btbox.strategy import Strategy
+from btbox.broker import Broker
 
 
 class Backtest:
-    def __init__(self, strategy, market):
+    def __init__(self, strategy, market, broker):
+        assert isinstance(strategy, Strategy)
+        assert isinstance(market, Market)
+        assert isinstance(broker, Broker)
         self._strategy = strategy
         self._market = market
 
@@ -14,5 +19,6 @@ class Backtest:
 def create(Strategy, data):
     strategy = Strategy()
     market = Market(data)
-    backtest = Backtest(strategy, market)
+    broker = Broker()
+    backtest = Backtest(strategy, market, broker)
     return backtest
