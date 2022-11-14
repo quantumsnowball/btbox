@@ -1,17 +1,26 @@
 from typing import Dict
 from btbox.market import Market
+from datetime import datetime
+from typing import List
 
 
 class Broker:
     def __init__(self,
                  market: Market) -> None:
         self._market = market
+        self._timeline = self._market.timeline
         self._cash: float = 0
         self._positions: Dict[str, float] = {}
+
+    @property
+    def timeline(self) -> List[datetime]:
+        return self._timeline
 
     # system
     def sync(self, now) -> None:
         self._now = now
+        # set now attr to a new timestamp in market
+        self._market.sync(now)
 
     # operations
     def deposit(self,

@@ -12,20 +12,17 @@ class Backtest:
         assert isinstance(strategy, Strategy)
         self._strategy = strategy
         self._broker = self._strategy.broker
+        self._timeline = self._strategy.timeline
 
     def run(self):
         # timeline loop
-        for i, now in enumerate(timeline):
+        for i, now in enumerate(self._timeline):
             # set now attr to a new timestamp in strategy
             self._strategy.sync(now)
-            # set now attr to a new timestamp in broker
-            self._strategy.broker.sync(now)
-            # set now attr to a new timestamp in market
-            self._strategy.market.sync(now)
             # run strategy as defined by user
-            self._strategy.step(i, now, self._strategy.broker)
+            self._strategy.step(i, now, self._broker)
             # do daily settlement
-            self._strategy.broker.settlement()
+            self._broker.settlement()
 
 
 # helper

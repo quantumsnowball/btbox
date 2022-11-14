@@ -12,3 +12,7 @@ class Market:
     @property
     def timeline(self) -> List[datetime]:
         return self._timeline
+
+    # system
+    def sync(self, now) -> None:
+        self._now = now
