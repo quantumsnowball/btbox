@@ -1,12 +1,18 @@
+from btbox.market import Market
+
+
 class Backtest:
-    def __init__(self, strategy):
+    def __init__(self, strategy, market):
         self._strategy = strategy
+        self._market = market
 
     def run(self):
         self._strategy.run()
 
 
-def create(Strategy):
+# helper
+def create(Strategy, data):
     strategy = Strategy()
-    backtest = Backtest(strategy)
+    market = Market(data)
+    backtest = Backtest(strategy, market)
     return backtest
