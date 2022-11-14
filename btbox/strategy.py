@@ -1,5 +1,5 @@
 class Strategy:
-    name = 'UnnamedStrategy'
+    name: str = 'UnnamedStrategy'
 
     def run(self):
         print(f'Strategy {self.name} is running ...')
