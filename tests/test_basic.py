@@ -13,7 +13,6 @@ class Algo(btbox.Strategy):
     def step(self, i, now, broker):
         # this contains the algo logics
         assert 0
-        pass
 
 
 ohlcv = pd.read_csv('tests/SPY.csv', index_col='Date', parse_dates=True)
@@ -33,8 +32,8 @@ def test3():
 
 
 def test4():
-    strategy = Algo()
     market = btbox.market.Market(ohlcv)
     broker = btbox.broker.Broker()
+    strategy = Algo(market, broker, ohlcv)
     backtest = btbox.backtest.Backtest(strategy, market, broker)
     backtest.run()

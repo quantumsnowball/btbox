@@ -18,7 +18,18 @@ class Backtest:
         self._broker = broker
 
     def run(self):
-        self._strategy.run()
+        # timeline loop
+        for i, now in enumerate(timeline):
+            # set now attr to a new timestamp in strategy
+            self._strategy.sync(now)
+            # set now attr to a new timestamp in broker
+            self._strategy.broker.sync(now)
+            # set now attr to a new timestamp in market
+            self._strategy.market.sync(now)
+            # run strategy as defined by user
+            self._strategy.step(i, now, self._strategy.broker)
+            # do daily settlement
+            self._strategy.broker.settlement()
 
 
 # helper
