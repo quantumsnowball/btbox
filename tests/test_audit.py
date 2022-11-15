@@ -59,7 +59,7 @@ def test_buy_stock():
             # initial deposit
             if i == 0:
                 broker.deposit(INI_CASH)
-                broker.trade(SYMBOL, +QUANTITY)
+                broker.order.trade(SYMBOL, +QUANTITY)
                 broker.withdrawal(broker.cash)
                 assert broker.cash == 0
             if i % 1000 == 0 and i > 0:
@@ -85,7 +85,7 @@ def test_nav_report():
             if i == 0:
                 broker.deposit(INI_CASH)
             if i % 1000 == 0:
-                broker.trade(SYMBOL, +QUANTITY)
+                broker.order.trade(SYMBOL, +QUANTITY)
                 logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
                 assert broker.report.trades.iloc[-1].Symbol == 'SPY'
                 assert broker.report.trades.Quantity.sum() == \

@@ -1,5 +1,7 @@
 from btbox.broker.account import Account
 from btbox.broker.audit import Audit
+from btbox.broker.order import Order
+from btbox.broker.portfolio import Portfolio
 from btbox.broker.report import Report
 from btbox.market import Market
 from datetime import datetime
@@ -14,6 +16,8 @@ class Broker:
         self._account = Account()
         self._audit = Audit(self._market, self._account)
         self._report = Report()
+        self._order = Order(self._market, self._account, self._report)
+        self._portfolio = Portfolio(self._order, self._market, self._audit)
 
     @property
     def timeline(self) -> List[datetime]:
@@ -28,12 +32,20 @@ class Broker:
         return self._account.positions
 
     @property
+    def order(self) -> Order:
+        return self._order
+
+    @property
     def report(self) -> Report:
         return self._report
 
     @property
     def audit(self) -> Audit:
         return self._audit
+
+    @property
+    def portfolio(self) -> Portfolio:
+        return self._portfolio
 
     @property
     def market(self) -> Market:
@@ -45,6 +57,8 @@ class Broker:
         # set now attr to a new timestamp in market
         self._market.sync(now)
         self._audit.sync(now)
+        self._order.sync(now)
+        self._portfolio.sync(now)
 
     # operations
     def deposit(self,
@@ -55,26 +69,8 @@ class Broker:
                    amount: float) -> None:
         self._account.cash -= amount
 
-    def trade(self,
-              symbol: str,
-              quantity: float) -> None:
-        # price
-        price = self._market.get_close_at(symbol, self._now)
-        # cash flow
-        gross_proceeds = -price * quantity
-        fees = 0
-        net_proceeds = gross_proceeds - fees
-        # settlement
-        self._account.cash += net_proceeds
-        self._account.positions[symbol] += quantity
-        # write trade history
-        self._report.log_trade(
-            date=self._now, symbol=symbol,
-            action='BOT' if quantity >= 0 else 'SLD', quantity=quantity,
-            price=price, gross_proceeds=gross_proceeds, fees=fees,
-            net_proceeds=net_proceeds)
-
     # audit
+
     def settlement(self) -> None:
         # write nav history
         nav = self._audit.nav_account()
