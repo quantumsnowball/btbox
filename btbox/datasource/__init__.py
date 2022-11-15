@@ -1,4 +1,4 @@
-import pandas as pd
+from pandas import read_csv, DataFrame
 from datetime import datetime
 from typing import Dict, List
 from functools import cache
@@ -6,7 +6,7 @@ from functools import cache
 
 class DataSource:
     def __init__(self,
-                 dataframes: Dict[str, pd.DataFrame],
+                 dataframes: Dict[str, DataFrame],
                  window: int = 1) -> None:
         self._dataframes = dataframes
         self._window = window
@@ -17,15 +17,15 @@ class DataSource:
         return self._timeline
 
     @cache
-    def get_ohlcv(self, symbol: str) -> pd.DataFrame:
+    def get_ohlcv(self, symbol: str) -> DataFrame:
         return self._dataframes[symbol]
 
     # helper
     @classmethod
-    def import_yahoo_csv(cls, path: str) -> pd.DataFrame:
-        df = pd.read_csv(path,
-                         index_col='Date',
-                         parse_dates=True)
+    def import_yahoo_csv(cls, path: str) -> DataFrame:
+        df = read_csv(path,
+                      index_col='Date',
+                      parse_dates=True)
         df.drop('Close', axis=1, inplace=True)
         df.rename({'Adj Close': 'Close'}, axis=1, inplace=True)
         return df

@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Tuple
-import pandas as pd
+from pandas import DataFrame, Series
 
 
 class _Record:
@@ -19,12 +19,12 @@ class Report:
         self._nav_history_log: List[_Record.NavHistory.type] = []
 
     @property
-    def nav_history(self) -> pd.Series:
-        df = pd.DataFrame(self._nav_history_log,
-                          columns=_Record.NavHistory.columns)
-        return pd.Series(df.NAV.values,
-                         index=df.Date,
-                         name=_Record.NavHistory.columns[-1])
+    def nav_history(self) -> Series:
+        df = DataFrame(self._nav_history_log,
+                       columns=_Record.NavHistory.columns)
+        return Series(df.NAV.values,
+                      index=df.Date,
+                      name=_Record.NavHistory.columns[-1])
 
     def log_nav_history(self, date: datetime, nav: float) -> None:
         self._nav_history_log.append((date, nav, ))

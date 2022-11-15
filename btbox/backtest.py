@@ -1,4 +1,4 @@
-import pandas as pd
+from pandas import DataFrame
 from btbox.datasource import DataSource
 from btbox.market import Market
 from btbox.strategy import Strategy
@@ -27,7 +27,7 @@ class Backtest:
 
 # helper
 def create(CustomStrategy: Type[Strategy],
-           dataframes: Dict[str, pd.DataFrame]) -> Backtest:
+           dataframes: Dict[str, DataFrame]) -> Backtest:
     datasource = DataSource(dataframes)
     market = Market(datasource)
     broker = Broker(market)

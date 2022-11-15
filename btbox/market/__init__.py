@@ -1,4 +1,4 @@
-import pandas as pd
+from pandas import DataFrame
 from datetime import datetime
 from btbox.datasource import DataSource
 from typing import List
@@ -22,7 +22,7 @@ class Market:
     @cache
     def get_ohlcv_at(self,
                      symbol: str,
-                     at: datetime) -> pd.DataFrame:
+                     at: datetime) -> DataFrame:
         return self._datasource.get_ohlcv(symbol).loc[at]
 
     @cache
@@ -32,5 +32,5 @@ class Market:
         return self._datasource.get_ohlcv(symbol).at[at, 'Close']
 
     @cache
-    def get_ohlcv_window_at(self, symbol: str, at: datetime, length: int) -> pd.DataFrame:
-        return pd.DataFrame()
+    def get_ohlcv_window_at(self, symbol: str, at: datetime, length: int) -> DataFrame:
+        return DataFrame()
