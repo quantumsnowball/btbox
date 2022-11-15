@@ -78,4 +78,4 @@ class Broker:
     def settlement(self) -> None:
         # write nav history
         nav = self._audit.nav_account()
-        self._report.log_nav_history(self._now, nav)
+        self._report.log_nav(self._now, nav)

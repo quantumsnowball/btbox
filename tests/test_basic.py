@@ -1,4 +1,3 @@
-import pandas as pd
 import btbox
 import btbox.backtest
 from btbox.backtest import Backtest
