@@ -1,9 +1,4 @@
-from pandas import DataFrame
-from btbox.datasource import DataSource
-from btbox.market import Market
 from btbox.strategy import Strategy
-from btbox.broker import Broker
-from typing import Type, Dict
 
 
 class Backtest:
@@ -23,14 +18,3 @@ class Backtest:
             self._strategy.step(i, now, self._broker)
             # do daily settlement
             self._broker.settlement()
-
-
-# helper
-def create(CustomStrategy: Type[Strategy],
-           dataframes: Dict[str, DataFrame]) -> Backtest:
-    datasource = DataSource(dataframes)
-    market = Market(datasource)
-    broker = Broker(market)
-    strategy = CustomStrategy(broker)
-    backtest = Backtest(strategy)
-    return backtest

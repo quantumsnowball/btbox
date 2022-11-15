@@ -1,5 +1,6 @@
 import btbox
 import btbox.backtest
+import btbox.backtest.utils
 from btbox.backtest import Backtest
 from btbox.broker import Broker
 from btbox.datasource import DataSource
@@ -22,11 +23,11 @@ def test1():
 
 
 def test2():
-    btbox.backtest.create(CustomStrategy, dataframes).run()
+    btbox.backtest.utils.create(CustomStrategy, dataframes).run()
 
 
 def test3():
-    bt = btbox.backtest.create(CustomStrategy, dataframes)
+    bt = btbox.backtest.utils.create(CustomStrategy, dataframes)
     bt.run()
 
 
