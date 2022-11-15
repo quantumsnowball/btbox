@@ -16,6 +16,14 @@ class Order:
     def sync(self, now) -> None:
         self._now = now
 
+    def deposit(self,
+                amount: float) -> None:
+        self._account.cash += amount
+
+    def withdrawal(self,
+                   amount: float) -> None:
+        self._account.cash -= amount
+
     def trade(self,
               symbol: str,
               quantity: float) -> None:

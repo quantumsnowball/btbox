@@ -60,17 +60,6 @@ class Broker:
         self._order.sync(now)
         self._portfolio.sync(now)
 
-    # operations
-    def deposit(self,
-                amount: float) -> None:
-        self._account.cash += amount
-
-    def withdrawal(self,
-                   amount: float) -> None:
-        self._account.cash -= amount
-
-    # audit
-
     def settlement(self) -> None:
         # write nav history
         nav = self._audit.nav_account()

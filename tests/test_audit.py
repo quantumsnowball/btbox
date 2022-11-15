@@ -20,7 +20,7 @@ def test_audit_cash():
         def step(self, i: int, now: datetime, broker: Broker):
             # initial deposit
             if i == 0:
-                broker.deposit(INI_CASH)
+                broker.order.deposit(INI_CASH)
             if i % 1000 == 0:
                 logger.info(dict(i=i, now=now, cash=broker.cash))
                 assert broker.cash == INI_CASH
@@ -38,7 +38,7 @@ def test_record_cash():
         def step(self, i: int, now: datetime, broker: Broker):
             # initial deposit
             if i == 0:
-                broker.deposit(INI_CASH)
+                broker.order.deposit(INI_CASH)
             if i % 1000 == 0 and i > 0:
                 logger.info(dict(i=i, now=now, cash=broker.cash))
                 assert broker.report.nav.iloc[-1] == INI_CASH
@@ -58,9 +58,9 @@ def test_buy_stock():
         def step(self, i: int, now: datetime, broker: Broker):
             # initial deposit
             if i == 0:
-                broker.deposit(INI_CASH)
+                broker.order.deposit(INI_CASH)
                 broker.order.trade(SYMBOL, +QUANTITY)
-                broker.withdrawal(broker.cash)
+                broker.order.withdrawal(broker.cash)
                 assert broker.cash == 0
             if i % 1000 == 0 and i > 0:
                 logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
@@ -83,7 +83,7 @@ def test_nav_report():
         def step(self, i: int, now: datetime, broker: Broker):
             # initial deposit
             if i == 0:
-                broker.deposit(INI_CASH)
+                broker.order.deposit(INI_CASH)
             if i % 1000 == 0:
                 broker.order.trade(SYMBOL, +QUANTITY)
                 logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))

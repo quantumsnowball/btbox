@@ -21,7 +21,7 @@ def test_target_weight():
         def step(self, i: int, now: datetime, broker: Broker):
             # initial deposit
             if i == 0:
-                broker.deposit(INI_CASH)
+                broker.order.deposit(INI_CASH)
             if i % 1000 == 0:
                 broker.portfolio.trade_target_weight(
                     SYMBOL, TARGET_WEIGHT, min_weight=0)
