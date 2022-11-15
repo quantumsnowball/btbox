@@ -3,6 +3,7 @@ import btbox.backtest
 import btbox.backtest.utils
 from btbox.backtest import Backtest
 from btbox.broker import Broker
+from btbox.clock import Clock
 from btbox.datasource import DataSource
 from btbox.datasource.utils import import_yahoo_csv
 from btbox.market import Market
@@ -33,9 +34,10 @@ def test3():
 
 
 def test4():
+    clock = Clock()
     datasource = DataSource(dataframes)
-    market = Market(datasource)
-    broker = Broker(market)
-    strategy = CustomStrategy(broker)
-    backtest = Backtest(strategy)
+    market = Market(datasource, clock)
+    broker = Broker(market, clock)
+    strategy = CustomStrategy(broker, clock)
+    backtest = Backtest(strategy, clock)
     backtest.run()

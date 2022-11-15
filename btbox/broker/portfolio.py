@@ -1,3 +1,4 @@
+from btbox.clock import Clock
 from btbox.broker.audit import Audit
 from btbox.broker.order import Order
 from btbox.market import Market
@@ -7,14 +8,12 @@ class Portfolio:
     def __init__(self,
                  order: Order,
                  market: Market,
-                 audit: Audit):
+                 audit: Audit,
+                 clock: Clock):
         self._order = order
         self._market = market
         self._audit = audit
-
-    # system
-    def sync(self, now) -> None:
-        self._now = now
+        self._clock = clock
 
     def trade_target_weight(self,
                             symbol: str,
@@ -26,5 +25,5 @@ class Portfolio:
         if abs(net_value / nav) < min_weight:
             return
         target_quantity = net_value / \
-            self._market.get_close_at(symbol, self._now)
+            self._market.get_close_at(symbol, self._clock.now)
         self._order.trade(symbol, target_quantity)

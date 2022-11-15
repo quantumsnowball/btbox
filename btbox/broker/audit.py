@@ -1,3 +1,4 @@
+from btbox.clock import Clock
 from btbox.broker.account import Account
 from btbox.market import Market
 
@@ -5,17 +6,15 @@ from btbox.market import Market
 class Audit:
     def __init__(self,
                  market: Market,
-                 account: Account) -> None:
+                 account: Account,
+                 clock: Clock) -> None:
         self._market = market
         self._account = account
-
-    # system
-    def sync(self, now) -> None:
-        self._now = now
+        self._clock = clock
 
     def nav_position(self,
                      symbol: str) -> float:
-        price = self._market.get_close_at(symbol, self._now)
+        price = self._market.get_close_at(symbol, self._clock.now)
         nav = self._account.positions[symbol] * price
         return nav
 

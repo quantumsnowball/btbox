@@ -27,7 +27,7 @@ def test_main_loop_on_dummy_data():
             # this contains the algo logics
             if i % 1000 == 0:
                 logger.info(dict(i=i, now=now, broker=broker))
-                assert now == broker._now == broker._market._now
+                assert now == broker._clock.now == broker._market._clock.now
 
     btbox.create_backtest(CustomStrategy, dataframes).run()
 
@@ -42,6 +42,6 @@ def test_main_loop():
             # this contains the algo logics
             if i % 1000 == 0:
                 logger.info(dict(i=i, now=now, broker=broker))
-                assert now == broker._now == broker._market._now
+                assert now == broker._clock.now == broker._market._clock.now
 
     btbox.create_backtest(CustomStrategy, dataframes).run()

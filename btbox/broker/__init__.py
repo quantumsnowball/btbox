@@ -1,3 +1,4 @@
+from btbox.clock import Clock
 from btbox.broker.account import Account
 from btbox.broker.audit import Audit
 from btbox.broker.order import Order
@@ -10,14 +11,19 @@ from typing import List, Dict
 
 class Broker:
     def __init__(self,
-                 market: Market) -> None:
+                 market: Market,
+                 clock: Clock) -> None:
         self._market = market
         self._timeline = self._market.timeline
         self._account = Account()
-        self._audit = Audit(self._market, self._account)
+        self._audit = Audit(
+            self._market, self._account, clock)
         self._report = Report()
-        self._order = Order(self._market, self._account, self._report)
-        self._portfolio = Portfolio(self._order, self._market, self._audit)
+        self._order = Order(
+            self._market, self._account, self._report, clock)
+        self._portfolio = Portfolio(
+            self._order, self._market, self._audit, clock)
+        self._clock = clock
 
     @property
     def timeline(self) -> List[datetime]:
@@ -51,16 +57,7 @@ class Broker:
     def market(self) -> Market:
         return self._market
 
-    # system
-    def sync(self, now) -> None:
-        self._now = now
-        # set now attr to a new timestamp in market
-        self._market.sync(now)
-        self._audit.sync(now)
-        self._order.sync(now)
-        self._portfolio.sync(now)
-
     def settlement(self) -> None:
         # write nav history
         nav = self._audit.nav_account()
-        self._report.log_nav(self._now, nav)
+        self._report.log_nav(self._clock.now, nav)

@@ -1,7 +1,7 @@
 from datetime import datetime
-import btbox
-import btbox.backtest
+from btbox import create_backtest
 from btbox.broker import Broker
+from btbox.strategy import Strategy
 from btbox.datasource.utils import import_yahoo_csv
 import logging
 
@@ -14,7 +14,7 @@ def test_audit_cash():
     INI_CASH = 1_234_567
     dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
 
-    class CustomStrategy(btbox.Strategy):
+    class CustomStrategy(Strategy):
         name = 'test audit cash'
 
         def step(self, i: int, now: datetime, broker: Broker):
@@ -25,14 +25,14 @@ def test_audit_cash():
                 logger.info(dict(i=i, now=now, cash=broker.cash))
                 assert broker.cash == INI_CASH
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    create_backtest(CustomStrategy, dataframes).run()
 
 
 def test_record_cash():
     INI_CASH = 1_234_567
     dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
 
-    class CustomStrategy(btbox.Strategy):
+    class CustomStrategy(Strategy):
         name = 'test record cash'
 
         def step(self, i: int, now: datetime, broker: Broker):
@@ -43,7 +43,7 @@ def test_record_cash():
                 logger.info(dict(i=i, now=now, cash=broker.cash))
                 assert broker.report.nav.iloc[-1] == INI_CASH
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    create_backtest(CustomStrategy, dataframes).run()
 
 
 def test_buy_stock():
@@ -52,7 +52,7 @@ def test_buy_stock():
     QUANTITY = 10
     dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
 
-    class CustomStrategy(btbox.Strategy):
+    class CustomStrategy(Strategy):
         name = 'test buy stock'
 
         def step(self, i: int, now: datetime, broker: Broker):
@@ -68,7 +68,7 @@ def test_buy_stock():
                 assert broker.market.get_close_at(SYMBOL, now) * QUANTITY == \
                     broker.audit.nav_account()
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    create_backtest(CustomStrategy, dataframes).run()
 
 
 def test_nav_report():
@@ -77,7 +77,7 @@ def test_nav_report():
     QUANTITY = 10
     dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
 
-    class CustomStrategy(btbox.Strategy):
+    class CustomStrategy(Strategy):
         name = 'test nav report'
 
         def step(self, i: int, now: datetime, broker: Broker):
@@ -91,4 +91,4 @@ def test_nav_report():
                 assert broker.report.trades.Quantity.sum() == \
                     (i // 1000 + 1) * QUANTITY
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    create_backtest(CustomStrategy, dataframes).run()
