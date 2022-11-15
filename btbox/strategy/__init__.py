@@ -1,10 +1,10 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List
 from btbox.broker import Broker
 
 
-class Strategy:
+class Strategy(ABC):
     name: str = 'UnnamedStrategy'
 
     def __init__(self,
