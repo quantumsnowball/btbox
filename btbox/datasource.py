@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime
 from typing import Dict, List
+from functools import cache
 
 
 class DataSource:
@@ -15,6 +16,7 @@ class DataSource:
     def timeline(self) -> List[datetime]:
         return self._timeline
 
+    @cache
     def get_ohlcv(self, symbol: str) -> pd.DataFrame:
         return self._dataframes[symbol]
 
@@ -24,4 +26,6 @@ class DataSource:
         df = pd.read_csv(path,
                          index_col='Date',
                          parse_dates=True)
+        df.drop('Close', axis=1, inplace=True)
+        df.rename({'Adj Close': 'Close'}, axis=1, inplace=True)
         return df
