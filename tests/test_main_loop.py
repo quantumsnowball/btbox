@@ -1,5 +1,5 @@
 from datetime import datetime
-from pandas import date_range, DataFrame
+from pandas import date_range, DataFrame, Series
 import numpy as np
 import btbox
 import btbox.backtest
@@ -13,9 +13,12 @@ logger.setLevel(logging.INFO)
 
 
 def test_main_loop_on_dummy_data():
-    dates = date_range(start='2010-01-01', end='2020-12-31')
+    dates = Series(date_range(start='2010-01-01',
+                   end='2020-12-31'), name='Date')
+    columns = ['Open', 'High', 'Low', 'Close', 'Volume']
     dataframes = {'SPY': DataFrame(
-        np.random.randint(0, 1000, size=len(dates)), index=dates)}
+        np.random.randint(0, 1000, size=(len(dates), 5)),
+        columns=columns, index=dates)}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop on dummy data'
