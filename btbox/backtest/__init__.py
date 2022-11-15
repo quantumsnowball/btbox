@@ -1,3 +1,4 @@
+from btbox.backtest.result import Result
 from btbox.strategy import Strategy
 
 
@@ -9,7 +10,7 @@ class Backtest:
         self._broker = self._strategy.broker
         self._timeline = self._strategy.timeline
 
-    def run(self) -> None:
+    def run(self) -> Result:
         # timeline loop
         for i, now in enumerate(self._timeline):
             # set now attr to a new timestamp in strategy
@@ -18,3 +19,4 @@ class Backtest:
             self._strategy.step(i, now, self._broker)
             # do daily settlement
             self._broker.settlement()
+        return Result(self._strategy, self._broker.report)
