@@ -9,10 +9,15 @@ class Audit:
         self._market = market
         self._account = account
 
+    # system
+    def sync(self, now) -> None:
+        self._now = now
+
     def nav_position(self,
-                     position: str) -> float:
-        # TODO
-        return 0
+                     symbol: str) -> float:
+        price = self._market.get_close_at(symbol, self._now)
+        nav = self._account.positions[symbol] * price
+        return nav
 
     def nav_all_positions(self) -> float:
         value = 0.0

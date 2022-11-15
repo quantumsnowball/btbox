@@ -47,8 +47,10 @@ def test_record_cash():
 
 
 def test_buy_stock():
-    ini_cash = 1e6
-    dataframes = {'SPY': DataSource.import_yahoo_csv('tests/SPY.csv')}
+    INI_CASH = 1e6
+    SYMBOL = 'SPY'
+    QUANTITY = 10
+    dataframes = {SYMBOL: DataSource.import_yahoo_csv('tests/SPY.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test buy stock'
@@ -56,10 +58,14 @@ def test_buy_stock():
         def step(self, i: int, now: datetime, broker: Broker):
             # initial deposit
             if i == 0:
-                broker.deposit(ini_cash)
-                broker.trade('SPY', +5)
+                broker.deposit(INI_CASH)
+                broker.trade(SYMBOL, +QUANTITY)
+                broker.withdrawal(broker.cash)
+                assert broker.cash == 0
             if i % 1000 == 0 and i > 0:
-                logger.info(dict(i=i, now=now, SPY=broker.positions['SPY']))
-                assert broker.positions['SPY'] == 5
+                logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
+                assert broker.positions[SYMBOL] == QUANTITY
+                assert broker.market.get_close_at(SYMBOL, now) * QUANTITY == \
+                    broker.audit.nav_account()
 
     btbox.create_backtest(CustomStrategy, dataframes).run()

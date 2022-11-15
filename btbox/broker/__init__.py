@@ -30,17 +30,30 @@ class Broker:
     @property
     def report(self) -> Report:
         return self._report
-    # system
 
+    @property
+    def audit(self) -> Audit:
+        return self._audit
+
+    @property
+    def market(self) -> Market:
+        return self._market
+
+    # system
     def sync(self, now) -> None:
         self._now = now
         # set now attr to a new timestamp in market
         self._market.sync(now)
+        self._audit.sync(now)
 
     # operations
     def deposit(self,
                 amount: float) -> None:
         self._account.cash += amount
+
+    def withdrawal(self,
+                   amount: float) -> None:
+        self._account.cash -= amount
 
     def trade(self,
               symbol: str,

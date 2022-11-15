@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 from btbox.datasource import DataSource
 from typing import List
+from functools import cache
 
 
 class Market:
@@ -18,15 +19,18 @@ class Market:
     def sync(self, now) -> None:
         self._now = now
 
+    @cache
     def get_ohlcv_at(self,
                      symbol: str,
                      at: datetime) -> pd.DataFrame:
-        return pd.DataFrame()
+        return self._datasource.get_ohlcv(symbol).loc[at]
 
+    @cache
     def get_close_at(self,
                      symbol: str,
                      at: datetime) -> float:
-        return 350
+        return self._datasource.get_ohlcv(symbol).at[at, 'Close']
 
+    @cache
     def get_ohlcv_window_at(self, symbol: str, at: datetime, length: int) -> pd.DataFrame:
         return pd.DataFrame()
