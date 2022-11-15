@@ -84,11 +84,11 @@ def test_nav_report():
             # initial deposit
             if i == 0:
                 broker.deposit(INI_CASH)
+            if i % 1000 == 0:
                 broker.trade(SYMBOL, +QUANTITY)
-            if i % 1000 == 0 and i > 0:
                 logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
-                # assert broker.positions[SYMBOL] == QUANTITY
-                # assert broker.market.get_close_at(SYMBOL, now) * QUANTITY == \
-                #     broker.audit.nav_account()
+                assert broker.report.trades.iloc[-1].Symbol == 'SPY'
+                assert broker.report.trades.Quantity.sum() == \
+                    (i // 1000 + 1) * QUANTITY
 
     btbox.create_backtest(CustomStrategy, dataframes).run()

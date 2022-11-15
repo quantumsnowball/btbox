@@ -68,11 +68,11 @@ class Broker:
         self._account.cash += net_proceeds
         self._account.positions[symbol] += quantity
         # write trade history
-        # self._trade_history.append(self.Record.trade_history(
-        #     Date=self._now, Symbol=stock.symbol, Action='BOT' if quantity > 0 else 'SLD',
-        #     Quantity=quantity, Price=price, GrossProceeds=gross_proceeds, Fees=fees,
-        #     NetProceeds=net_proceeds
-        # ))
+        self._report.log_trade(
+            date=self._now, symbol=symbol,
+            action='BOT' if quantity >= 0 else 'SLD', quantity=quantity,
+            price=price, gross_proceeds=gross_proceeds, fees=fees,
+            net_proceeds=net_proceeds)
 
     # audit
     def settlement(self) -> None:
