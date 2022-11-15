@@ -2,7 +2,7 @@ from datetime import datetime
 import btbox
 import btbox.backtest
 from btbox.broker import Broker
-from btbox.datasource import DataSource
+from btbox.datasource.utils import import_yahoo_csv
 import logging
 
 
@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 def test_audit_cash():
     INI_CASH = 1_234_567
-    dataframes = {'SPY': DataSource.import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test audit cash'
@@ -30,7 +30,7 @@ def test_audit_cash():
 
 def test_record_cash():
     INI_CASH = 1_234_567
-    dataframes = {'SPY': DataSource.import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test record cash'
@@ -50,7 +50,7 @@ def test_buy_stock():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     QUANTITY = 10
-    dataframes = {SYMBOL: DataSource.import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test buy stock'
@@ -75,7 +75,7 @@ def test_nav_report():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     QUANTITY = 10
-    dataframes = {SYMBOL: DataSource.import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test nav report'

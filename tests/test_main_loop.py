@@ -4,7 +4,7 @@ import numpy as np
 import btbox
 import btbox.backtest
 from btbox.broker import Broker
-from btbox.datasource import DataSource
+from btbox.datasource.utils import import_yahoo_csv
 import logging
 
 
@@ -33,7 +33,7 @@ def test_main_loop_on_dummy_data():
 
 
 def test_main_loop():
-    dataframes = {'SPY': DataSource.import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop'

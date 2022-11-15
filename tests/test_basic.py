@@ -4,6 +4,7 @@ import btbox.backtest.utils
 from btbox.backtest import Backtest
 from btbox.broker import Broker
 from btbox.datasource import DataSource
+from btbox.datasource.utils import import_yahoo_csv
 from btbox.market import Market
 
 
@@ -15,7 +16,7 @@ class CustomStrategy(btbox.Strategy):
         pass
 
 
-dataframes = {'SPY': DataSource.import_yahoo_csv('tests/SPY.csv')}
+dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
 
 
 def test1():
