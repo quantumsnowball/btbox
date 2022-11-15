@@ -1,4 +1,5 @@
-from typing import Dict
+from btbox.broker.account import Account
+from btbox.broker.audit import Audit
 from btbox.market import Market
 from datetime import datetime
 from typing import List
@@ -9,8 +10,8 @@ class Broker:
                  market: Market) -> None:
         self._market = market
         self._timeline = self._market.timeline
-        self._cash: float = 0
-        self._positions: Dict[str, float] = {}
+        self._account = Account()
+        self._audit = Audit(self._market, self._account)
 
     @property
     def timeline(self) -> List[datetime]:
@@ -18,7 +19,7 @@ class Broker:
 
     @property
     def cash(self) -> float:
-        return self._cash
+        return self._account.cash
 
     # system
     def sync(self, now) -> None:
@@ -29,7 +30,7 @@ class Broker:
     # operations
     def deposit(self,
                 amount: float) -> None:
-        self._cash += amount
+        self._account.cash += amount
 
     def trade(self,
               ticker: str,
@@ -39,21 +40,5 @@ class Broker:
     # audit
     def settlement(self) -> None:
         # write nav history
-        nav = self.nav_account()
+        nav = self._audit.nav_account()
         pass
-
-    def nav_position(self,
-                     position: str) -> float:
-        # TODO
-        return 0
-
-    def nav_all_positions(self) -> float:
-        value = 0.0
-        for position in self._positions:
-            value += self.nav_position(position)
-        return value
-
-    def nav_account(self) -> float:
-        position_value = self.nav_all_positions()
-        nav = position_value + self._cash
-        return nav
