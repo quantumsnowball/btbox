@@ -9,5 +9,9 @@ class Result:
         self._strategy = strategy
         self._report = report
 
+    @property
+    def report(self) -> Report:
+        return self._report
+
     def plot(self):
         self._report.nav.plot()
