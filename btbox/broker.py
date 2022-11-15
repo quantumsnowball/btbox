@@ -16,6 +16,10 @@ class Broker:
     def timeline(self) -> List[datetime]:
         return self._timeline
 
+    @property
+    def cash(self) -> float:
+        return self._cash
+
     # system
     def sync(self, now) -> None:
         self._now = now
@@ -34,6 +38,8 @@ class Broker:
 
     # audit
     def settlement(self) -> None:
+        # write nav history
+        nav = self.nav_account()
         pass
 
     def nav_position(self,
