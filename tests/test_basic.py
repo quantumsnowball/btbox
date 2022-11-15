@@ -15,24 +15,24 @@ class CustomStrategy(btbox.Strategy):
         pass
 
 
-dataframe = pd.read_csv('tests/SPY.csv', index_col='Date', parse_dates=True)
+dataframes = {'SPY': DataSource.import_yahoo_csv('tests/SPY.csv')}
 
 
 def test1():
-    btbox.create_backtest(CustomStrategy, dataframe).run()
+    btbox.create_backtest(CustomStrategy, dataframes).run()
 
 
 def test2():
-    btbox.backtest.create(CustomStrategy, dataframe).run()
+    btbox.backtest.create(CustomStrategy, dataframes).run()
 
 
 def test3():
-    bt = btbox.backtest.create(CustomStrategy, dataframe)
+    bt = btbox.backtest.create(CustomStrategy, dataframes)
     bt.run()
 
 
 def test4():
-    datasource = DataSource(dataframe)
+    datasource = DataSource(dataframes)
     market = Market(datasource)
     broker = Broker(market)
     strategy = CustomStrategy(broker)

@@ -3,7 +3,7 @@ from btbox.broker.audit import Audit
 from btbox.broker.report import Report
 from btbox.market import Market
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 
 class Broker:
@@ -24,6 +24,10 @@ class Broker:
         return self._account.cash
 
     @property
+    def positions(self) -> Dict[str, float]:
+        return self._account.positions
+
+    @property
     def report(self) -> Report:
         return self._report
     # system
@@ -39,9 +43,23 @@ class Broker:
         self._account.cash += amount
 
     def trade(self,
-              ticker: str,
-              amount: float) -> None:
-        pass
+              symbol: str,
+              quantity: float) -> None:
+        # price
+        price = self._market.get_close_at(symbol, self._now)
+        # cash flow
+        gross_proceeds = -price * quantity
+        fees = 0
+        net_proceeds = gross_proceeds - fees
+        # settlement
+        self._account.cash += net_proceeds
+        self._account.positions[symbol] += quantity
+        # write trade history
+        # self._trade_history.append(self.Record.trade_history(
+        #     Date=self._now, Symbol=stock.symbol, Action='BOT' if quantity > 0 else 'SLD',
+        #     Quantity=quantity, Price=price, GrossProceeds=gross_proceeds, Fees=fees,
+        #     NetProceeds=net_proceeds
+        # ))
 
     # audit
     def settlement(self) -> None:

@@ -3,7 +3,7 @@ from btbox.datasource import DataSource
 from btbox.market import Market
 from btbox.strategy import Strategy
 from btbox.broker import Broker
-from typing import Type
+from typing import Type, Dict
 
 
 class Backtest:
@@ -27,8 +27,8 @@ class Backtest:
 
 # helper
 def create(CustomStrategy: Type[Strategy],
-           dataframe: pd.DataFrame) -> Backtest:
-    datasource = DataSource(dataframe)
+           dataframes: Dict[str, pd.DataFrame]) -> Backtest:
+    datasource = DataSource(dataframes)
     market = Market(datasource)
     broker = Broker(market)
     strategy = CustomStrategy(broker)

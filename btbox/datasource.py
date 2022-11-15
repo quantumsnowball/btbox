@@ -1,17 +1,27 @@
 import pandas as pd
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
 
 class DataSource:
     def __init__(self,
-                 dataframe: pd.DataFrame,
+                 dataframes: Dict[str, pd.DataFrame],
                  window: int = 1) -> None:
-        assert isinstance(dataframe, pd.DataFrame)
-        self._dataframe = dataframe
+        self._dataframes = dataframes
         self._window = window
-        self._timeline = self._dataframe.index.to_list()
+        self._timeline = list(self._dataframes.values())[0].index.to_list()
 
     @property
     def timeline(self) -> List[datetime]:
         return self._timeline
+
+    def get_ohlcv(self, symbol: str) -> pd.DataFrame:
+        return self._dataframes[symbol]
+
+    # helper
+    @classmethod
+    def import_yahoo_csv(cls, path: str) -> pd.DataFrame:
+        df = pd.read_csv(path,
+                         index_col='Date',
+                         parse_dates=True)
+        return df
