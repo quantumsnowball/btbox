@@ -6,8 +6,9 @@ from btbox.strategy import Strategy
 
 
 def create_backtest(CustomStrategys: List[Type[Strategy]],
-                    dataframes: Dict[str, DataFrame]) -> Backtest:
-    jobs = [create_job(CustomStrategy, dataframes)
+                    dataframes: Dict[str, DataFrame],
+                    **kwds_create_job) -> Backtest:
+    jobs = [create_job(CustomStrategy, dataframes, **kwds_create_job)
             for CustomStrategy in CustomStrategys]
     backtest = Backtest(jobs)
     return backtest

@@ -31,6 +31,8 @@ class Market:
         return self._datasource.get_ohlcv(symbol).at[at, 'Close']
 
     @cache
-    def get_ohlcv_window_at(self, symbol: str, at: datetime, length: int) -> DataFrame:
-        # TODO
-        return DataFrame()
+    def get_ohlcv_window_at(self,
+                            symbol: str,
+                            on: datetime,
+                            length: int) -> DataFrame:
+        return self._datasource.get_ohlcv(symbol).loc[:on].iloc[-length:]

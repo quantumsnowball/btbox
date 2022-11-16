@@ -10,9 +10,10 @@ from typing import Type, Dict
 
 # helper
 def create_job(CustomStrategy: Type[Strategy],
-               dataframes: Dict[str, DataFrame]) -> Job:
+               dataframes: Dict[str, DataFrame],
+               **kwds_DataSource) -> Job:
     clock = Clock()
-    datasource = DataSource(dataframes)
+    datasource = DataSource(dataframes, **kwds_DataSource)
     market = Market(datasource, clock)
     broker = Broker(market, clock)
     strategy = CustomStrategy(broker, clock)
