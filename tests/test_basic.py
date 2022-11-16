@@ -3,7 +3,7 @@ import btbox.job
 import btbox.job.utils
 from btbox.job import Job
 from btbox.broker import Broker
-from btbox.clock import Clock
+from btbox.share import Clock
 from btbox.datasource import DataSource
 from btbox.datasource.utils import import_yahoo_csv
 from btbox.market import Market

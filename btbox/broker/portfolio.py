@@ -1,4 +1,4 @@
-from btbox.clock import Clock
+from btbox.share import Clock
 from btbox.broker.audit import Audit
 from btbox.broker.order import Order
 from btbox.market import Market

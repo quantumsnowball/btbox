@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from datetime import datetime
-from btbox.clock import Clock
+from btbox.share import Clock
 from btbox.datasource import DataSource
 from typing import List
 from functools import cache

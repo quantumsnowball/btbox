@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from btbox.job import Job
-from btbox.clock import Clock
+from btbox.share import Clock
 from btbox.datasource import DataSource
 from btbox.market import Market
 from btbox.strategy import Strategy

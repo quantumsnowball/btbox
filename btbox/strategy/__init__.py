@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List
-from btbox.clock import Clock
+from btbox.share import Clock
 from btbox.broker import Broker
 
 

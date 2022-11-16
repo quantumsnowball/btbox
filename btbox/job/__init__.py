@@ -1,4 +1,4 @@
-from btbox.clock import Clock
+from btbox.share import Clock
 from btbox.job.result import Result
 from btbox.strategy import Strategy
 
