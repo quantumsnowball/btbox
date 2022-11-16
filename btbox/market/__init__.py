@@ -2,7 +2,6 @@ from pandas import DataFrame
 from datetime import datetime
 from btbox.share import Clock
 from btbox.datasource import DataSource
-from typing import List
 from functools import cache
 
 
@@ -15,7 +14,7 @@ class Market:
         self._clock = clock
 
     @property
-    def timeline(self) -> List[datetime]:
+    def timeline(self) -> list[datetime]:
         return self._timeline
 
     @cache

@@ -1,20 +1,18 @@
 from pandas import DataFrame
 from datetime import datetime
-from typing import Dict, List, Union
 from functools import cache
 from btbox.datasource.utils import (
     parse_start_end_window,
     trim_ohlcv_length,
-    verify_ohlcv
 )
 
 
 class DataSource:
     def __init__(self,
-                 dataframes: Dict[str, DataFrame],
+                 dataframes: dict[str, DataFrame],
                  *,
-                 start: Union[datetime, str, None] = None,
-                 end: Union[datetime, str, None] = None,
+                 start: datetime | str | None = None,
+                 end: datetime | str | None = None,
                  window: int = 1) -> None:
         (self._start,
          self._end,
@@ -29,7 +27,7 @@ class DataSource:
                               ).loc[self._start:self._end].index.to_list()
 
     @property
-    def timeline(self) -> List[datetime]:
+    def timeline(self) -> list[datetime]:
         return self._timeline
 
     @cache

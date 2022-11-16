@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List, Tuple
 from pandas import DataFrame, Series
 
 
@@ -7,20 +6,20 @@ class _Record:
     class Nav:
         name = 'NAV'
         columns = ('Date', 'NAV')
-        type = Tuple[datetime, float]
+        type = tuple[datetime, float]
 
     class Trades:
         name = 'Trades'
         columns = ('Date Symbol Action Quantity '
                    'Price GrossProceeds Fees NetProceeds').split(' ')
-        type = Tuple[datetime, str, str, float,
+        type = tuple[datetime, str, str, float,
                      float, float, float, float]
 
 
 class Report:
     def __init__(self) -> None:
-        self._nav_log: List[_Record.Nav.type] = []
-        self._trades_log: List[_Record.Trades.type] = []
+        self._nav_log: list[_Record.Nav.type] = []
+        self._trades_log: list[_Record.Trades.type] = []
 
     @property
     def nav(self) -> Series:

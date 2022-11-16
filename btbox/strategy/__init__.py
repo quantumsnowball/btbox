@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import List
 from btbox.share import Clock
 from btbox.broker import Broker
 
@@ -16,7 +15,7 @@ class Strategy(ABC):
         self._clock = clock
 
     @property
-    def timeline(self) -> List[datetime]:
+    def timeline(self) -> list[datetime]:
         return self._timeline
 
     @property

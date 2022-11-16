@@ -1,4 +1,3 @@
-from typing import List
 from btbox.broker.report import Report
 from btbox.job.result import Result
 from pandas import DataFrame, concat
@@ -9,16 +8,16 @@ from btbox.strategy import Strategy
 
 class Results:
     def __init__(self,
-                 results: List[Result]) -> None:
+                 results: list[Result]) -> None:
         self._strategies = [r.strategy for r in results]
         self._reports = [r.report for r in results]
 
     @property
-    def strategies(self) -> List[Strategy]:
+    def strategies(self) -> list[Strategy]:
         return self._strategies
 
     @property
-    def reports(self) -> List[Report]:
+    def reports(self) -> list[Report]:
         return self._reports
 
     @property

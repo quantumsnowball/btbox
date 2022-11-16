@@ -6,7 +6,6 @@ from btbox.broker.portfolio import Portfolio
 from btbox.broker.report import Report
 from btbox.market import Market
 from datetime import datetime
-from typing import List, Dict
 
 
 class Broker:
@@ -26,7 +25,7 @@ class Broker:
         self._clock = clock
 
     @property
-    def timeline(self) -> List[datetime]:
+    def timeline(self) -> list[datetime]:
         return self._timeline
 
     @property
@@ -34,7 +33,7 @@ class Broker:
         return self._account.cash
 
     @property
-    def positions(self) -> Dict[str, float]:
+    def positions(self) -> dict[str, float]:
         return self._account.positions
 
     @property

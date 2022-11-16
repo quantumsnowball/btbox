@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Union, Tuple
 from pandas import to_datetime, read_csv, DataFrame
 
 
@@ -10,9 +9,9 @@ class Parser:
 
 def parse_start_end_window(
         first_ohlcv: DataFrame,
-        start: Union[datetime, str, None],
-        end: Union[datetime, str, None],
-        window: int) -> Tuple[datetime, datetime, int, datetime, datetime]:
+        start: datetime | str | None,
+        end: datetime | str | None,
+        window: int) -> tuple[datetime, datetime, int, datetime, datetime]:
     # None means min or max
     start = first_ohlcv.index[0] if not start else start
     end = first_ohlcv.index[-1] if not end else end

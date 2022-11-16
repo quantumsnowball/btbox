@@ -1,11 +1,10 @@
 from collections import defaultdict
-from typing import Dict
 
 
 class Account:
     def __init__(self) -> None:
         self._cash: float = 0
-        self._positions: Dict[str, float] = defaultdict(float)
+        self._positions: dict[str, float] = defaultdict(float)
 
     # cash
     @property
@@ -18,5 +17,5 @@ class Account:
 
     # positions
     @property
-    def positions(self) -> Dict[str, float]:
+    def positions(self) -> dict[str, float]:
         return self._positions

@@ -5,12 +5,11 @@ from btbox.datasource import DataSource
 from btbox.market import Market
 from btbox.strategy import Strategy
 from btbox.broker import Broker
-from typing import Type, Dict
 
 
 # helper
-def create_job(CustomStrategy: Type[Strategy],
-               dataframes: Dict[str, DataFrame],
+def create_job(CustomStrategy: type[Strategy],
+               dataframes: dict[str, DataFrame],
                **kwds_DataSource) -> Job:
     clock = Clock()
     datasource = DataSource(dataframes, **kwds_DataSource)

@@ -1,11 +1,10 @@
-from typing import List
 from btbox.backtest.results import Results
 from btbox.job import Job
 
 
 class Backtest:
     def __init__(self,
-                 jobs: List[Job]) -> None:
+                 jobs: list[Job]) -> None:
         self._jobs = jobs
 
     def run(self) -> Results:
