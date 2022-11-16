@@ -1,4 +1,5 @@
 from btbox.broker.report import Report
+from btbox.job.result.metrics import Metrics
 from btbox.strategy import Strategy
 import plotly.express as px
 
@@ -9,6 +10,7 @@ class Result:
                  report: Report):
         self._strategy = strategy
         self._report = report
+        self._metrics = Metrics(self._strategy, self._report)
 
     @property
     def strategy(self) -> Strategy:
@@ -17,6 +19,10 @@ class Result:
     @property
     def report(self) -> Report:
         return self._report
+
+    @property
+    def metrics(self) -> Metrics:
+        return self._metrics
 
     def plot(self, **line_kws) -> None:
         fig = px.line(x=self._report.nav.index,
