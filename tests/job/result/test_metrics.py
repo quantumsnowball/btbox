@@ -12,6 +12,29 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
+def test_detect_annualize_factor():
+    test_cases = dict(
+        # BTC_bar1min=(365 * 24 * 60, 180),
+        BTC_bar1hour=(365 * 24, 30),
+        BTC_bar1day=(365, 3),
+        SPY_bar1day=(252, 3),
+        SPY_bar1week=(52, 0.4),
+        SPY_bar1month=(12, 0.1),
+    )
+    for fn, (exp, err) in test_cases.items():
+        ts = import_yahoo_csv(f'tests/_data_/{fn}.csv')
+        af = Mt.detect_annualize_factor(ts)
+        assert exp - err < af < exp + err
+
+    # bar1day = import_yahoo_csv('tests/_data_/SPY_bar1day.csv')
+    # bar1week = import_yahoo_csv('tests/_data_/SPY_bar1week.csv')
+    # bar1month = import_yahoo_csv('tests/_data_/SPY_bar1month.csv')
+    # af1day = Mt.detect_annualize_factor(bar1day)
+    # af1week = Mt.detect_annualize_factor(bar1week)
+    # af1month = Mt.detect_annualize_factor(bar1month)
+    # assert 0
+
+
 def test_total_return():
     assert Mt.total_return(Series([1, 1.5])) == 0.5
     assert Mt.total_return(Series([1, 2])) == 1.0
@@ -33,7 +56,7 @@ def test_metrics():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     TARGET_WEIGHT = 1.0
-    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test metrics'
@@ -54,3 +77,5 @@ def test_metrics():
         dataframes[SYMBOL].Close)
     assert result.metrics.cagr == Mt.cagr(
         dataframes[SYMBOL].Close)
+    # assert result.metrics.mu == Mt.mu(
+    #     dataframes[SYMBOL].Close)
