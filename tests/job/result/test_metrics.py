@@ -1,6 +1,6 @@
 from datetime import datetime
-
 from pandas import Series
+from pandas import to_datetime as dt
 import btbox
 import btbox.job
 from btbox.broker import Broker
@@ -16,6 +16,17 @@ def test_total_return():
     assert Mt.total_return(Series([1, 1.5])) == 0.5
     assert Mt.total_return(Series([1, 2])) == 1.0
     assert Mt.total_return(Series([1] + list(range(20)) + [3])) == 2.0
+
+
+def test_cagr():
+    assert round(Mt.cagr(Series([1, 2], index=[
+        dt('2020-01-01'), dt('2020-12-31')])), 4) == 1.0
+    assert round(Mt.cagr(Series([1, 2], index=[
+        dt('2020-01-01'), dt('2022-12-31')])), 4) == 0.2599
+    assert round(Mt.cagr(Series([1, 2], index=[
+        dt('2017-01-01'), dt('2022-12-31')])), 4) == 0.1225
+    assert round(Mt.cagr(Series([1, 2], index=[
+        dt('2013-01-01'), dt('2022-12-31')])), 4) == 0.0718
 
 
 def test_metrics():
@@ -40,4 +51,6 @@ def test_metrics():
     job = btbox.create_job(CustomStrategy, dataframes)
     result = job.run()
     assert result.metrics.total_return == Mt.total_return(
+        dataframes[SYMBOL].Close)
+    assert result.metrics.cagr == Mt.cagr(
         dataframes[SYMBOL].Close)

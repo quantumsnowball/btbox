@@ -26,3 +26,7 @@ class Metrics:
     @cached_property
     def total_return(self) -> float:
         return total_return(self._report.nav)
+
+    @cached_property
+    def cagr(self) -> float:
+        return cagr(self._report.nav)
