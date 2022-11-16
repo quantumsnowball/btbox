@@ -1,2 +1,2 @@
 from btbox.strategy import Strategy
-from btbox.backtest.utils import create as create_backtest
+from btbox.job.utils import create_job

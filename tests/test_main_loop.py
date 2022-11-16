@@ -2,7 +2,7 @@ from datetime import datetime
 from pandas import date_range, DataFrame, Series
 import numpy as np
 import btbox
-import btbox.backtest
+import btbox.job
 from btbox.broker import Broker
 from btbox.datasource.utils import import_yahoo_csv
 import logging
@@ -29,7 +29,7 @@ def test_main_loop_on_dummy_data():
                 logger.info(dict(i=i, now=now, broker=broker))
                 assert now == broker._clock.now == broker._market._clock.now
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    btbox.create_job(CustomStrategy, dataframes).run()
 
 
 def test_main_loop():
@@ -44,4 +44,4 @@ def test_main_loop():
                 logger.info(dict(i=i, now=now, broker=broker))
                 assert now == broker._clock.now == broker._market._clock.now
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    btbox.create_job(CustomStrategy, dataframes).run()

@@ -1,6 +1,6 @@
 from datetime import datetime
 import btbox
-import btbox.backtest
+import btbox.job
 from btbox.broker import Broker
 from btbox.datasource.utils import import_yahoo_csv
 import logging
@@ -30,4 +30,4 @@ def test_target_weight():
                 assert round(broker.audit.nav_account() * TARGET_WEIGHT) == \
                     round(broker.audit.nav_position(SYMBOL))
 
-    btbox.create_backtest(CustomStrategy, dataframes).run()
+    btbox.create_job(CustomStrategy, dataframes).run()

@@ -1,5 +1,5 @@
 from datetime import datetime
-from btbox import create_backtest
+from btbox import create_job
 from btbox.broker import Broker
 from btbox.strategy import Strategy
 from btbox.datasource.utils import import_yahoo_csv
@@ -25,7 +25,7 @@ def test_audit_cash():
                 logger.info(dict(i=i, now=now, cash=broker.cash))
                 assert broker.cash == INI_CASH
 
-    create_backtest(CustomStrategy, dataframes).run()
+    create_job(CustomStrategy, dataframes).run()
 
 
 def test_record_cash():
@@ -43,7 +43,7 @@ def test_record_cash():
                 logger.info(dict(i=i, now=now, cash=broker.cash))
                 assert broker.report.nav.iloc[-1] == INI_CASH
 
-    create_backtest(CustomStrategy, dataframes).run()
+    create_job(CustomStrategy, dataframes).run()
 
 
 def test_buy_stock():
@@ -68,7 +68,7 @@ def test_buy_stock():
                 assert broker.market.get_close_at(SYMBOL, now) * QUANTITY == \
                     broker.audit.nav_account()
 
-    create_backtest(CustomStrategy, dataframes).run()
+    create_job(CustomStrategy, dataframes).run()
 
 
 def test_nav_report():
@@ -91,4 +91,4 @@ def test_nav_report():
                 assert broker.report.trades.Quantity.sum() == \
                     (i // 1000 + 1) * QUANTITY
 
-    create_backtest(CustomStrategy, dataframes).run()
+    create_job(CustomStrategy, dataframes).run()

@@ -5,4 +5,4 @@ BTBox is a simple to use event-driven backtesting tool written in Python. The go
 # Design
 
 Chainn of object compositions as follows:
-backtest -> strategy -> broker -> market -> datasource
+backtest -> job -> strategy -> broker -> market -> datasource

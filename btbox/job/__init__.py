@@ -1,9 +1,9 @@
 from btbox.clock import Clock
-from btbox.backtest.result import Result
+from btbox.job.result import Result
 from btbox.strategy import Strategy
 
 
-class Backtest:
+class Job:
     def __init__(self,
                  strategy: Strategy,
                  clock: Clock) -> None:
