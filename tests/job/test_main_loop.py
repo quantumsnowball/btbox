@@ -33,7 +33,7 @@ def test_main_loop_on_dummy_data():
 
 
 def test_main_loop():
-    dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop'

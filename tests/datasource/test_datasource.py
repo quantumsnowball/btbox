@@ -19,7 +19,7 @@ def test_start_end_window_timeline():
     START = '2010-01-04'
     END = '2020-12-31'
     WINDOW = 100
-    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class Benchmark(Strategy):
         name = 'Benchmark'

@@ -13,7 +13,7 @@ logger.setLevel(logging.INFO)
 def test_multi_jobs_basic():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
-    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class Benchmark(Strategy):
         name = 'Benchmark'

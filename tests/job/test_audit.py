@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 def test_audit_cash():
     INI_CASH = 1_234_567
-    dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(Strategy):
         name = 'test audit cash'
@@ -30,7 +30,7 @@ def test_audit_cash():
 
 def test_record_cash():
     INI_CASH = 1_234_567
-    dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(Strategy):
         name = 'test record cash'
@@ -50,7 +50,7 @@ def test_buy_stock():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     QUANTITY = 10
-    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(Strategy):
         name = 'test buy stock'
@@ -75,7 +75,7 @@ def test_nav_report():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     QUANTITY = 10
-    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(Strategy):
         name = 'test nav report'

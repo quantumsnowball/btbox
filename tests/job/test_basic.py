@@ -17,7 +17,7 @@ class CustomStrategy(btbox.Strategy):
         pass
 
 
-dataframes = {'SPY': import_yahoo_csv('tests/SPY.csv')}
+dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
 
 def test1():

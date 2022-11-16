@@ -13,7 +13,7 @@ def test_target_weight():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     TARGET_WEIGHT = 0.5
-    dataframes = {SYMBOL: import_yahoo_csv('tests/SPY.csv')}
+    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test target weight'
