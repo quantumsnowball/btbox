@@ -32,4 +32,5 @@ def test_multi_jobs_basic():
                 broker.portfolio.trade_target_weight(SYMBOL, 0.5)
 
     bt = create_backtest([Benchmark, CustomStrategy], dataframes)
-    bt.run()
+    results = bt.run()
+    assert results is not None

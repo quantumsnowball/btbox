@@ -1,6 +1,6 @@
 from typing import List
+from btbox.backtest.results import Results
 from btbox.job import Job
-from btbox.job.result import Result
 
 
 class Backtest:
@@ -8,9 +8,9 @@ class Backtest:
                  jobs: List[Job]) -> None:
         self._jobs = jobs
 
-    def run(self) -> List[Result]:
+    def run(self) -> Results:
         results = []
         for job in self._jobs:
             result = job.run()
             results.append(result)
-        return results
+        return Results(results)

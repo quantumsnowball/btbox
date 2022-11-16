@@ -11,6 +11,10 @@ class Result:
         self._report = report
 
     @property
+    def strategy(self) -> Strategy:
+        return self._strategy
+
+    @property
     def report(self) -> Report:
         return self._report
 
