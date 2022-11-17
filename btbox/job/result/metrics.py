@@ -1,7 +1,9 @@
+from datetime import datetime
 from functools import cached_property
+from dataclasses import dataclass
 import pandas as pd
 import numpy as np
-from pandas import Series, DataFrame
+from pandas import to_datetime, DatetimeIndex, Series, DataFrame, Timedelta
 from btbox.broker.report import Report
 from btbox.share import RISK_FREE_RATE
 from btbox.strategy import Strategy
@@ -53,6 +55,47 @@ def mu_sigma(ts: Series,
     return mu, sigma
 
 
+@dataclass
+class DrawdownPoints:
+    start: datetime
+    end: datetime
+    high: float
+    low: float
+
+
+@dataclass
+class DrawdownResult:
+    maxdrawdown: float
+    points: DrawdownPoints
+    bars: int
+    duration: Timedelta
+
+
+def drawdown(ts: Series) -> DrawdownResult:
+    assert isinstance(ts.index, DatetimeIndex)
+    log_ts = Series(np.log(ts))
+    run_max = Series(np.maximum.accumulate(log_ts))
+    end = to_datetime((run_max - log_ts).idxmax())
+    start = to_datetime((log_ts.loc[:end]).idxmax())
+    log_low = log_ts.at[end]
+    log_high = log_ts.at[start]
+    norm_low = np.exp(log_low)
+    norm_high = np.exp(log_high)
+    maxdrawdown = norm_low / norm_high - 1
+    bars = len(log_ts.loc[start:end])
+    duration = end - start
+
+    return DrawdownResult(
+        maxdrawdown=maxdrawdown,
+        points=DrawdownPoints(
+            start=start,
+            end=end,
+            low=norm_low,
+            high=norm_high),
+        bars=bars,
+        duration=duration)
+
+
 def sharpe(ts: Series,
            annualize_factor: float,
            riskfree: float) -> float:
@@ -84,3 +127,7 @@ class Metrics:
     @cached_property
     def sharpe(self) -> float:
         return sharpe(self._report.nav, self._annualize_factor, RISK_FREE_RATE)
+
+    @cached_property
+    def drawdown(self) -> DrawdownResult:
+        return drawdown(self._report.nav)

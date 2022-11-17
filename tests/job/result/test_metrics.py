@@ -75,6 +75,19 @@ def test_mu_sigma():
         'SPY_bar1week', 'SPY_bar1month', 0.13, '2010-01-01', '2021-12-31')
 
 
+def test_drawdown():
+    ts_spy = import_yahoo_csv('tests/_data_/SPY_bar1day.csv').Close
+    mdd_spy = Mt.drawdown(ts_spy)
+    assert -0.56 < mdd_spy.maxdrawdown < -0.55
+    assert mdd_spy.points.start.year == 2007
+    assert mdd_spy.points.end.year == 2009
+    ts_btc = import_yahoo_csv('tests/_data_/BTC_bar1day.csv').Close
+    mdd_btc = Mt.drawdown(ts_btc)
+    assert -0.85 < mdd_btc.maxdrawdown < -0.84
+    assert mdd_btc.points.start.year == 2013
+    assert mdd_btc.points.end.year == 2015
+
+
 def test_sharpe():
     ts = import_yahoo_csv(
         'tests/_data_/SPY_bar1day.csv').loc['2010-01-01':'2022-10-31'].Close
@@ -113,3 +126,5 @@ def test_metrics():
         ref_ts, Mt.detect_annualize_factor(ref_ts))[1], 4)
     assert round(result.metrics.sharpe, 4) == round(Mt.sharpe(
         ref_ts, Mt.detect_annualize_factor(ref_ts), RISK_FREE_RATE), 4)
+    assert round(result.metrics.drawdown.maxdrawdown, 4) == round(
+        Mt.drawdown(ref_ts).maxdrawdown, 4)
