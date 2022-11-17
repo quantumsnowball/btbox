@@ -51,7 +51,8 @@ class Results:
             'sigma': [m.mu_sigma[1] for m in self._metrics],
             'mdd': [m.drawdown.maxdrawdown for m in self._metrics],
             'duration': [m.drawdown.duration for m in self._metrics],
-            'sharpe': [m.sharpe for m in self._metrics]
+            'sharpe': [m.sharpe for m in self._metrics],
+            'calmar': [m.calmar for m in self._metrics]
         }
         df = DataFrame(data, index=names)
         return df
@@ -64,6 +65,8 @@ class Results:
             'mu': '{:.2%}',
             'sigma': '{:.2%}',
             'mdd': '{:.2%}',
+            'duration': lambda d: str(d)[:-3],
             'sharpe': '{:.3f}',
+            'calmar': '{:.3f}',
         })
         return pretty

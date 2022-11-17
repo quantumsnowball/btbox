@@ -104,6 +104,15 @@ def sharpe(ts: Series,
     return sharpe
 
 
+def calmar(ts: Series,
+           annualize_factor: float,
+           riskfree: float) -> float:
+    mu, _ = mu_sigma(ts, annualize_factor)
+    mdd = abs(drawdown(ts).maxdrawdown)
+    calmar = (mu - riskfree) / mdd
+    return calmar
+
+
 class Metrics:
     def __init__(self,
                  strategy: Strategy,
@@ -131,3 +140,7 @@ class Metrics:
     @cached_property
     def drawdown(self) -> DrawdownResult:
         return drawdown(self._report.nav)
+
+    @cached_property
+    def calmar(self) -> float:
+        return calmar(self._report.nav, self._annualize_factor, RISK_FREE_RATE)
