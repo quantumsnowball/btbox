@@ -7,6 +7,7 @@ from btbox.broker import Broker
 from btbox.datasource.utils import import_yahoo_csv
 import btbox.job.result.metrics as Mt
 import logging
+from btbox.share import RISK_FREE_RATE
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -75,7 +76,10 @@ def test_mu_sigma():
 
 
 def test_sharpe():
-    pass
+    ts = import_yahoo_csv(
+        'tests/_data_/SPY_bar1day.csv').loc['2010-01-01':'2022-10-31'].Close
+    sharpe = Mt.sharpe(ts, Mt.detect_annualize_factor(ts), RISK_FREE_RATE)
+    assert 0.74 < sharpe < 0.75
 
 
 def test_metrics():
@@ -99,9 +103,13 @@ def test_metrics():
 
     job = btbox.create_job(CustomStrategy, dataframes)
     result = job.run()
-    assert result.metrics.total_return == Mt.total_return(
-        dataframes[SYMBOL].Close)
-    assert result.metrics.cagr == Mt.cagr(
-        dataframes[SYMBOL].Close)
-    # assert result.metrics.mu == Mt.mu(
-    #     dataframes[SYMBOL].Close)
+
+    ref_ts = dataframes[SYMBOL].Close
+    assert result.metrics.total_return == Mt.total_return(ref_ts)
+    assert result.metrics.cagr == Mt.cagr(ref_ts)
+    assert round(result.metrics.mu_sigma[0], 4) == round(Mt.mu_sigma(
+        ref_ts, Mt.detect_annualize_factor(ref_ts))[0], 4)
+    assert round(result.metrics.mu_sigma[1], 4) == round(Mt.mu_sigma(
+        ref_ts, Mt.detect_annualize_factor(ref_ts))[1], 4)
+    assert round(result.metrics.sharpe, 4) == round(Mt.sharpe(
+        ref_ts, Mt.detect_annualize_factor(ref_ts), RISK_FREE_RATE), 4)
