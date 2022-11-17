@@ -49,6 +49,8 @@ class Results:
             'cagr': [m.cagr for m in self._metrics],
             'mu': [m.mu_sigma[0] for m in self._metrics],
             'sigma': [m.mu_sigma[1] for m in self._metrics],
+            'mdd': [m.drawdown.maxdrawdown for m in self._metrics],
+            'duration': [m.drawdown.duration for m in self._metrics],
             'sharpe': [m.sharpe for m in self._metrics]
         }
         df = DataFrame(data, index=names)
@@ -61,6 +63,7 @@ class Results:
             'cagr': '{:.2%}',
             'mu': '{:.2%}',
             'sigma': '{:.2%}',
+            'mdd': '{:.2%}',
             'sharpe': '{:.3f}',
         })
         return pretty
