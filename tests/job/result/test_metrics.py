@@ -15,8 +15,15 @@ logger.setLevel(logging.INFO)
 def test_detect_annualize_factor():
     test_cases = dict(
         BTC_bar1min=365 * 24 * 60,
+        BTC_bar3min=365 * 24 * 60 / 3,
+        BTC_bar5min=365 * 24 * 60 / 5,
+        BTC_bar15min=365 * 24 * 60 / 15,
         BTC_bar1hour=365 * 24,
+        BTC_bar2hour=365 * 24 / 2,
+        BTC_bar3hour=365 * 24 / 3,
+        BTC_bar4hour=365 * 24 / 4,
         BTC_bar1day=365,
+        BTC_bar1month=12,
         SPY_bar1day=252,
         SPY_bar1week=52,
         SPY_bar1month=12,
