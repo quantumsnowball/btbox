@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from pandas import Series, DataFrame
 from btbox.broker.report import Report
+from btbox.share import RISK_FREE_RATE
 from btbox.strategy import Strategy
 
 
@@ -66,6 +67,7 @@ class Metrics:
                  report: Report) -> None:
         self._strategy = strategy
         self._report = report
+        self._annualize_factor = detect_annualize_factor(self._report.nav)
 
     @cached_property
     def total_return(self) -> float:
@@ -76,6 +78,9 @@ class Metrics:
         return cagr(self._report.nav)
 
     @cached_property
-    def mu_sigma(self) -> float:
-        annualize_factor = 252
-        return mu_sigma(self._report.nav, annualize_factor)
+    def mu_sigma(self) -> tuple[float, float]:
+        return mu_sigma(self._report.nav, self._annualize_factor)
+
+    @cached_property
+    def sharpe(self) -> float:
+        return sharpe(self._report.nav, self._annualize_factor, RISK_FREE_RATE)

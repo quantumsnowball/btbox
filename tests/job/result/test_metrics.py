@@ -51,6 +51,33 @@ def test_cagr():
         dt('2013-01-01'), dt('2022-12-31')])), 4) == 0.0718
 
 
+def test_mu_sigma():
+    def confirm_similar_stats(fn_A, fn_B, err,
+                              start=None, end=None):
+        ts_A = import_yahoo_csv(
+            f'tests/_data_/{fn_A}.csv').loc[start:end].Close
+        ts_B = import_yahoo_csv(
+            f'tests/_data_/{fn_B}.csv').loc[start:end].Close
+        mu_A, sigma_A = Mt.mu_sigma(ts_A, Mt.detect_annualize_factor(ts_A))
+        mu_B, sigma_B = Mt.mu_sigma(ts_B, Mt.detect_annualize_factor(ts_B))
+        assert mu_A * (1 - err) < mu_B < mu_A * (1 + err)
+        assert sigma_A * (1 - err) < sigma_B < sigma_A * (1 + err)
+    confirm_similar_stats(
+        'BTC_bar1min', 'BTC_bar5min', 0.05, '2022-11-10', '2022-11-15')
+    confirm_similar_stats(
+        'BTC_bar2hour', 'BTC_bar4hour', 0.05, '2021-01-01', '2021-12-31')
+    confirm_similar_stats(
+        'BTC_bar1day', 'BTC_bar1month', 0.08, '2015-01-01', '2022-10-30')
+    confirm_similar_stats(
+        'SPY_bar1day', 'SPY_bar1week', 0.07, '2010-01-01', '2021-12-31')
+    confirm_similar_stats(
+        'SPY_bar1week', 'SPY_bar1month', 0.13, '2010-01-01', '2021-12-31')
+
+
+def test_sharpe():
+    pass
+
+
 def test_metrics():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
