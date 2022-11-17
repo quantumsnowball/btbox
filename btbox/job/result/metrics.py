@@ -1,17 +1,32 @@
-from functools import cache, cached_property
+from functools import cached_property
 import pandas as pd
+import numpy as np
 from pandas import Series, DataFrame
 from btbox.broker.report import Report
 from btbox.strategy import Strategy
 
 
-def detect_annualize_factor(ts: Series | DataFrame) -> float:
-    timeline = ts.index
-    time_diff = (timeline[-1] - timeline[0])
-    year_diff = time_diff.days / 365
-    n_timeline = len(timeline)
-    annualize_factor = n_timeline / year_diff
-    return annualize_factor
+def detect_annualize_factor(ts: Series | DataFrame,
+                            sample_size: int = 100) -> float:
+
+    def cal_annualize_factor(ts: Series | DataFrame) -> float:
+        timeline = ts.index
+        time_diff = (timeline[-1] - timeline[0])
+        year_diff = time_diff.total_seconds() / 60 / 60 / 24 / 365.25
+        n_timeline = len(timeline) - 1
+        annualize_factor = n_timeline / year_diff
+        return annualize_factor
+
+    N = len(ts)
+    len_trunk = min(N, sample_size)
+    trunks = [trunk
+              for i in range(-1, -N - 1, -len_trunk)
+              if len(trunk := ts.iloc[i - len_trunk: i]) >= len_trunk * 0.9]
+    stats = [cal_annualize_factor(trunk)
+             for trunk in trunks]
+    median = np.median(stats)
+    assert isinstance(median, float)
+    return median
 
 
 def total_return(ts: Series) -> float:
