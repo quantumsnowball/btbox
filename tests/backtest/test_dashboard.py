@@ -1,5 +1,6 @@
 from datetime import datetime
 from pandas import DataFrame
+from pandas.io.formats.style import Styler
 from btbox.backtest.utils import create_backtest
 from btbox.broker import Broker
 from btbox.strategy import Strategy
@@ -37,3 +38,6 @@ def test_dashboard():
     dashboard = results.dashboard()
     assert isinstance(dashboard, DataFrame)
     assert dashboard.shape == (2, 5)
+    dashboard_pretty = results.dashboard_pretty()
+    assert isinstance(dashboard_pretty, Styler)
+    assert dashboard_pretty.data.shape == (2, 5)

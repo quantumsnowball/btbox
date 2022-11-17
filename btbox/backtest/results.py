@@ -1,3 +1,4 @@
+from pandas.io.formats.style import Styler
 from btbox.broker.report import Report
 from btbox.job.result import Result
 from pandas import DataFrame, concat
@@ -52,3 +53,14 @@ class Results:
         }
         df = DataFrame(data, index=names)
         return df
+
+    def dashboard_pretty(self) -> Styler:
+        raw = self.dashboard()
+        pretty = raw.style.format({
+            'return': '{:,.1%}',
+            'cagr': '{:.2%}',
+            'mu': '{:.2%}',
+            'sigma': '{:.2%}',
+            'sharpe': '{:.3f}',
+        })
+        return pretty
