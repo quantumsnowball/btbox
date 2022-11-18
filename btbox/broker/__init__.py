@@ -29,6 +29,10 @@ class Broker:
         return self._timeline
 
     @property
+    def now(self) -> datetime:
+        return self._clock.now
+
+    @property
     def cash(self) -> float:
         return self._account.cash
 

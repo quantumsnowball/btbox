@@ -17,7 +17,7 @@ class Job:
         # timeline loop
         for i, now in enumerate(self._timeline):
             # set now and sync across all objects
-            self._clock.now = now
+            self._clock._sync(now)
             # run strategy as defined by user
             self._strategy.step(i, now, self._broker)
             # do daily settlement
