@@ -13,6 +13,10 @@ class Job:
         self._timeline = self._strategy.timeline
         self._clock = clock
 
+    @property
+    def name(self) -> str:
+        return self._strategy.name
+
     def run(self) -> Result:
         # initialize clock
         self._clock.sync(self._timeline[0], self)
