@@ -7,12 +7,14 @@ DEFAULT_CAPITAL = 1e6
 
 
 class Strategy:
-    name: str = 'UnnamedStrategy'
+    name: str | None = None
     capital: float = DEFAULT_CAPITAL
 
     def __init__(self,
                  broker: Broker,
                  clock: Clock) -> None:
+        if not self.name:
+            self.name = self.__class__.__name__
         self._broker = broker
         self._timeline = self._broker.timeline
         self._clock = clock
