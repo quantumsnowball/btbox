@@ -15,34 +15,34 @@ StBenchmarak = basicInitialOnly('Benchmark')
 StDecorator = basicFullInterval10('Decorator')
 
 
-dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
 
 def test1():
-    btbox.create_job(StBasic, dataframes).run()
-    btbox.create_job(StBenchmarak, dataframes).run()
-    btbox.create_job(StDecorator, dataframes).run()
+    btbox.create_job(StBasic, dfs).run()
+    btbox.create_job(StBenchmarak, dfs).run()
+    btbox.create_job(StDecorator, dfs).run()
 
 
 def test2():
-    btbox.job.utils.create_job(StBasic, dataframes).run()
-    btbox.job.utils.create_job(StBenchmarak, dataframes).run()
-    btbox.job.utils.create_job(StDecorator, dataframes).run()
+    btbox.job.utils.create_job(StBasic, dfs).run()
+    btbox.job.utils.create_job(StBenchmarak, dfs).run()
+    btbox.job.utils.create_job(StDecorator, dfs).run()
 
 
 def test3():
-    bt = btbox.job.utils.create_job(StBasic, dataframes)
+    bt = btbox.job.utils.create_job(StBasic, dfs)
     bt.run()
-    bt = btbox.job.utils.create_job(StBenchmarak, dataframes)
+    bt = btbox.job.utils.create_job(StBenchmarak, dfs)
     bt.run()
-    bt = btbox.job.utils.create_job(StDecorator, dataframes)
+    bt = btbox.job.utils.create_job(StDecorator, dfs)
     bt.run()
 
 
 def test4():
     def run_job(St):
         clock = Clock(Job)
-        datasource = DataSource(dataframes)
+        datasource = DataSource(dfs)
         market = Market(datasource, clock)
         broker = Broker(market, clock)
         strategy = St(broker, clock)
