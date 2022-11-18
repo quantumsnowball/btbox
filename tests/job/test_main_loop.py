@@ -22,11 +22,11 @@ def test_main_loop_on_dummy_data():
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop on dummy data'
 
-        def step(self, i: int, broker: Broker):
+        def step(self, i: int, b: Broker):
             # this contains the algo logics
             if i % 1000 == 0:
-                logger.info(dict(i=i, now=broker.now, broker=broker))
-                assert broker.now == broker._clock.now == broker._market._clock.now
+                logger.info(dict(i=i, now=b.now, broker=b))
+                assert b.now == b._clock.now == b._market._clock.now
 
     btbox.create_job(CustomStrategy, dataframes).run()
 
@@ -37,10 +37,10 @@ def test_main_loop():
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop'
 
-        def step(self, i: int, broker: Broker):
+        def step(self, i: int, b: Broker):
             # this contains the algo logics
             if i % 1000 == 0:
-                logger.info(dict(i=i, now=broker.now, broker=broker))
-                assert broker.now == broker._clock.now == broker._market._clock.now
+                logger.info(dict(i=i, now=b.now, broker=b))
+                assert b.now == b._clock.now == b._market._clock.now
 
     btbox.create_job(CustomStrategy, dataframes).run()

@@ -17,18 +17,18 @@ def test_multi_jobs_basic():
     class Benchmark(Strategy):
         name = 'Benchmark'
 
-        def step(self, i: int, broker: Broker):
+        def step(self, i: int, b: Broker):
             if i == 0:
-                broker.order.deposit(INI_CASH)
-                broker.portfolio.trade_target_weight(SYMBOL, 1.0)
+                b.order.deposit(INI_CASH)
+                b.portfolio.trade_target_weight(SYMBOL, 1.0)
 
     class CustomStrategy(Strategy):
         name = 'CustomStrategy'
 
-        def step(self, i: int, broker: Broker):
+        def step(self, i: int, b: Broker):
             if i == 0:
-                broker.order.deposit(INI_CASH)
-                broker.portfolio.trade_target_weight(SYMBOL, 0.5)
+                b.order.deposit(INI_CASH)
+                b.portfolio.trade_target_weight(SYMBOL, 0.5)
 
     bt = create_backtest([Benchmark, CustomStrategy], dataframes)
     results = bt.run()

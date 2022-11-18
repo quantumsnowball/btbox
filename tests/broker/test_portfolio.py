@@ -17,17 +17,16 @@ def test_target_weight():
     class CustomStrategy(btbox.Strategy):
         name = 'test target weight'
 
-        def step(self, i: int, broker: Broker):
+        def step(self, i: int, b: Broker):
             # initial deposit
             if i == 0:
-                broker.order.deposit(INI_CASH)
+                b.order.deposit(INI_CASH)
             if i % 1000 == 0:
-                broker.portfolio.trade_target_weight(
+                b.portfolio.trade_target_weight(
                     SYMBOL, TARGET_WEIGHT, min_weight=0)
-                logger.info(dict(i=i, now=broker.now,
-                            SPY=broker.positions[SYMBOL]))
-                assert broker.report.trades.iloc[-1].Symbol == 'SPY'
-                assert round(broker.audit.nav_account() * TARGET_WEIGHT) == \
-                    round(broker.audit.nav_position(SYMBOL))
+                logger.info(dict(i=i, now=b.now, SPY=b.positions[SYMBOL]))
+                assert b.report.trades.iloc[-1].Symbol == 'SPY'
+                assert round(b.audit.nav_account() * TARGET_WEIGHT) == \
+                    round(b.audit.nav_position(SYMBOL))
 
     btbox.create_job(CustomStrategy, dataframes).run()

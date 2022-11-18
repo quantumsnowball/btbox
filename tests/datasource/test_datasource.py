@@ -21,16 +21,15 @@ def test_start_end_window_timeline():
     class Benchmark(Strategy):
         name = 'Benchmark'
 
-        def step(self, i: int, broker: Broker):
+        def step(self, i: int, b: Broker):
             if i == 0:
-                broker.order.deposit(INI_CASH)
-                broker.portfolio.trade_target_weight(SYMBOL, 1.0)
-                assert broker.now == to_datetime(START)
+                b.order.deposit(INI_CASH)
+                b.portfolio.trade_target_weight(SYMBOL, 1.0)
+                assert b.now == to_datetime(START)
             if i % 250 == 0:
-                win = broker.market.get_ohlcv_window_at(
-                    SYMBOL, broker.now, WINDOW)
+                win = b.market.get_ohlcv_window_at(SYMBOL, b.now, WINDOW)
                 assert len(win) == WINDOW
-                assert win.index[-1] <= broker.now
+                assert win.index[-1] <= b.now
 
     job = create_job(Benchmark, dataframes,
                      start=START,
