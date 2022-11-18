@@ -1,4 +1,4 @@
-from pandas import DataFrame
+from pandas import DataFrame, Series
 from datetime import datetime
 from btbox.share import Clock
 from btbox.datasource import DataSource
@@ -29,4 +29,9 @@ class Market:
     def get_ohlcv_window(self,
                          symbol: str) -> DataFrame:
         return self._datasource.get_ohlcv_window_at(symbol,
+                                                    self._clock.now)
+
+    def get_close_window(self,
+                         symbol: str) -> Series:
+        return self._datasource.get_close_window_at(symbol,
                                                     self._clock.now)

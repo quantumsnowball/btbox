@@ -1,4 +1,4 @@
-from pandas import DataFrame
+from pandas import DataFrame, Series
 from datetime import datetime
 from functools import cache
 from btbox.datasource.utils import (
@@ -47,3 +47,9 @@ class DataSource:
                             symbol: str,
                             on: datetime) -> DataFrame:
         return self._dataframes[symbol].loc[:on].iloc[-self._window:]
+
+    @cache
+    def get_close_window_at(self,
+                            symbol: str,
+                            on: datetime) -> Series:
+        return self._dataframes[symbol].Close.loc[:on].iloc[-self._window:]
