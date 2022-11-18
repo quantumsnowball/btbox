@@ -1,8 +1,7 @@
-from pandas import DataFrame
+from pandas import DataFrame, Series
 from datetime import datetime
 from btbox.share import Clock
 from btbox.datasource import DataSource
-from functools import cache
 
 
 class Market:
@@ -17,21 +16,22 @@ class Market:
     def timeline(self) -> list[datetime]:
         return self._timeline
 
-    @cache
-    def get_ohlcv_at(self,
-                     symbol: str,
-                     at: datetime) -> DataFrame:
-        return self._datasource.get_ohlcv(symbol).loc[at]
+    def get_ohlcv(self,
+                  symbol: str) -> DataFrame:
+        return self._datasource.get_ohlcv_at(symbol,
+                                             self._clock.now)
 
-    @cache
-    def get_close_at(self,
-                     symbol: str,
-                     at: datetime) -> float:
-        return self._datasource.get_ohlcv(symbol).at[at, 'Close']
+    def get_close(self,
+                  symbol: str) -> float:
+        return self._datasource.get_close_at(symbol,
+                                             self._clock.now)
 
-    @cache
-    def get_ohlcv_window_at(self,
-                            symbol: str,
-                            on: datetime,
-                            length: int) -> DataFrame:
-        return self._datasource.get_ohlcv(symbol).loc[:on].iloc[-length:]
+    def get_ohlcv_window(self,
+                         symbol: str) -> DataFrame:
+        return self._datasource.get_ohlcv_window_at(symbol,
+                                                    self._clock.now)
+
+    def get_close_window(self,
+                         symbol: str) -> Series:
+        return self._datasource.get_close_window_at(symbol,
+                                                    self._clock.now)

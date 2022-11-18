@@ -27,7 +27,7 @@ class Order:
               symbol: str,
               quantity: float) -> None:
         # price
-        price = self._market.get_close_at(symbol, self._clock.now)
+        price = self._market.get_close(symbol)
         # cash flow
         gross_proceeds = -price * quantity
         fees = 0
