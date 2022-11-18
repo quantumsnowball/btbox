@@ -11,7 +11,7 @@ from btbox.broker import Broker
 def create_job(CustomStrategy: type[Strategy],
                dataframes: dict[str, DataFrame],
                **kwds_DataSource) -> Job:
-    clock = Clock()
+    clock = Clock(Job)
     datasource = DataSource(dataframes, **kwds_DataSource)
     market = Market(datasource, clock)
     broker = Broker(market, clock)

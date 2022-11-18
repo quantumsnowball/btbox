@@ -1,14 +1,19 @@
 from datetime import datetime
+from typing import Any
 
 
 RISK_FREE_RATE = 0.0
 
 
 class Clock:
-    def __init__(self, now: datetime = datetime(1970, 1, 1)) -> None:
-        self._now: datetime = now
+    def __init__(self,
+                 Owner: type) -> None:
+        self._now: datetime = datetime(1970, 1, 1)
+        self._Owner = Owner
 
-    def _sync(self, now: datetime) -> None:
+    def sync(self, now: datetime, caller: Any) -> None:
+        assert isinstance(caller, self._Owner), \
+            f'Only {self._Owner} is allowed to sync the clock.'
         self._now = now
 
     @property

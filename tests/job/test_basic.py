@@ -34,7 +34,7 @@ def test3():
 
 
 def test4():
-    clock = Clock()
+    clock = Clock(Job)
     datasource = DataSource(dataframes)
     market = Market(datasource, clock)
     broker = Broker(market, clock)
