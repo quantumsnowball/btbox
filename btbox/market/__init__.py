@@ -31,8 +31,6 @@ class Market:
 
     @cache
     def get_ohlcv_window(self,
-                         symbol: str,
-                         length: int) -> DataFrame:
+                         symbol: str) -> DataFrame:
         return self._datasource.get_ohlcv_window_at(symbol,
-                                                    self._clock.now,
-                                                    length)
+                                                    self._clock.now)

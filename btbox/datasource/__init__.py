@@ -45,6 +45,5 @@ class DataSource:
     @cache
     def get_ohlcv_window_at(self,
                             symbol: str,
-                            on: datetime,
-                            length: int) -> DataFrame:
-        return self._dataframes[symbol].loc[:on].iloc[-length:]
+                            on: datetime) -> DataFrame:
+        return self._dataframes[symbol].loc[:on].iloc[-self._window:]
