@@ -7,12 +7,33 @@ from btbox.share import Clock
 from btbox.datasource import DataSource
 from btbox.datasource.utils import import_yahoo_csv
 from btbox.market import Market
-from tests.helper import basicFullInterval10, basicInitialOnly, basicStepOnly
+from btbox.strategy import Strategy
+from btbox.strategy.decorator import interval
 
 
-StBasic = basicStepOnly('Basic')
-StBenchmarak = basicInitialOnly('Benchmark')
-StDecorator = basicFullInterval10('Decorator')
+class StBasic(Strategy):
+    name = 'Basic'
+
+    def step(self, i: int, b: Broker):
+        pass
+
+
+class StBenchmarak(Strategy):
+    name = 'Benchmark'
+
+    def initial(self, b: Broker):
+        pass
+
+
+class StDecorator(Strategy):
+    name = 'Decorator'
+
+    def initial(self, b: Broker):
+        pass
+
+    @interval(10)
+    def step(self, b: Broker):
+        pass
 
 
 dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
