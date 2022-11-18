@@ -1,10 +1,9 @@
-from abc import ABC, abstractmethod
 from datetime import datetime
 from btbox.share import Clock
 from btbox.broker import Broker
 
 
-class Strategy(ABC):
+class Strategy:
     name: str = 'UnnamedStrategy'
 
     def __init__(self,
@@ -22,7 +21,10 @@ class Strategy(ABC):
     def broker(self) -> Broker:
         return self._broker
 
-    @abstractmethod
+    def initial(self,
+                b: Broker) -> None:
+        pass
+
     def step(self,
              i: int,
              b: Broker) -> None:
