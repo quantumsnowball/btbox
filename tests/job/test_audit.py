@@ -64,7 +64,7 @@ def test_buy_stock():
             if i % 1000 == 0 and i > 0:
                 logger.info(dict(i=i, now=b.now, SPY=b.positions[SYMBOL]))
                 assert b.positions[SYMBOL] == QUANTITY
-                assert b.market.get_close_at(SYMBOL, b.now) * QUANTITY == \
+                assert b.market.get_close(SYMBOL) * QUANTITY == \
                     b.audit.nav_account()
 
     create_job(CustomStrategy, dataframes).run()

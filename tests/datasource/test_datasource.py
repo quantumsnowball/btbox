@@ -27,7 +27,7 @@ def test_start_end_window_timeline():
                 b.portfolio.trade_target_weight(SYMBOL, 1.0)
                 assert b.now == to_datetime(START)
             if i % 250 == 0:
-                win = b.market.get_ohlcv_window_at(SYMBOL, b.now, WINDOW)
+                win = b.market.get_ohlcv_window(SYMBOL)
                 assert len(win) == WINDOW
                 assert win.index[-1] <= b.now
 

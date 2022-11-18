@@ -2,7 +2,6 @@ from pandas import DataFrame
 from datetime import datetime
 from btbox.share import Clock
 from btbox.datasource import DataSource
-from functools import cache
 
 
 class Market:
