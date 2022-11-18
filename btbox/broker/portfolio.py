@@ -24,6 +24,5 @@ class Portfolio:
         net_value = target_value - self._audit.nav_position(symbol)
         if abs(net_value / nav) < min_weight:
             return
-        target_quantity = net_value / \
-            self._market.get_close_at(symbol, self._clock.now)
+        target_quantity = net_value / self._market.get_close(symbol)
         self._order.trade(symbol, target_quantity)
