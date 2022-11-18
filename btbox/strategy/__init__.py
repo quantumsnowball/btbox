@@ -3,8 +3,12 @@ from btbox.share import Clock
 from btbox.broker import Broker
 
 
+DEFAULT_CAPITAL = 1e6
+
+
 class Strategy:
     name: str = 'UnnamedStrategy'
+    capital: float = DEFAULT_CAPITAL
 
     def __init__(self,
                  broker: Broker,
@@ -12,6 +16,7 @@ class Strategy:
         self._broker = broker
         self._timeline = self._broker.timeline
         self._clock = clock
+        self._broker.order.deposit(self.capital)
 
     @property
     def timeline(self) -> list[datetime]:
