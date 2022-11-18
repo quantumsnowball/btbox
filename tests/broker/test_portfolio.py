@@ -1,4 +1,3 @@
-from datetime import datetime
 import btbox
 import btbox.job
 from btbox.broker import Broker
@@ -18,14 +17,15 @@ def test_target_weight():
     class CustomStrategy(btbox.Strategy):
         name = 'test target weight'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # initial deposit
             if i == 0:
                 broker.order.deposit(INI_CASH)
             if i % 1000 == 0:
                 broker.portfolio.trade_target_weight(
                     SYMBOL, TARGET_WEIGHT, min_weight=0)
-                logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
+                logger.info(dict(i=i, now=broker.now,
+                            SPY=broker.positions[SYMBOL]))
                 assert broker.report.trades.iloc[-1].Symbol == 'SPY'
                 assert round(broker.audit.nav_account() * TARGET_WEIGHT) == \
                     round(broker.audit.nav_position(SYMBOL))

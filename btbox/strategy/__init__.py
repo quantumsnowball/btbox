@@ -25,6 +25,5 @@ class Strategy(ABC):
     @abstractmethod
     def step(self,
              i: int,
-             now: datetime,
              broker: Broker) -> None:
         pass

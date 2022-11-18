@@ -1,4 +1,3 @@
-from datetime import datetime
 from pandas import DataFrame
 from pandas.io.formats.style import Styler
 from btbox.backtest.utils import create_backtest
@@ -20,7 +19,7 @@ def test_dashboard():
     class Benchmark(Strategy):
         name = 'Benchmark'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             if i == 0:
                 broker.order.deposit(INI_CASH)
                 broker.portfolio.trade_target_weight(SYMBOL, 1.0)
@@ -28,7 +27,7 @@ def test_dashboard():
     class CustomStrategy(Strategy):
         name = 'CustomStrategy'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             if i == 0:
                 broker.order.deposit(INI_CASH)
                 broker.portfolio.trade_target_weight(SYMBOL, 0.5)

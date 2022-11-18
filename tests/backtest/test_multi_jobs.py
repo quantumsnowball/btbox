@@ -1,4 +1,3 @@
-from datetime import datetime
 from btbox.backtest.utils import create_backtest
 from btbox.broker import Broker
 from btbox.strategy import Strategy
@@ -18,7 +17,7 @@ def test_multi_jobs_basic():
     class Benchmark(Strategy):
         name = 'Benchmark'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             if i == 0:
                 broker.order.deposit(INI_CASH)
                 broker.portfolio.trade_target_weight(SYMBOL, 1.0)
@@ -26,7 +25,7 @@ def test_multi_jobs_basic():
     class CustomStrategy(Strategy):
         name = 'CustomStrategy'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             if i == 0:
                 broker.order.deposit(INI_CASH)
                 broker.portfolio.trade_target_weight(SYMBOL, 0.5)

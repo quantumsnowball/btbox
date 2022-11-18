@@ -1,4 +1,3 @@
-from datetime import datetime
 from pandas import date_range, DataFrame, Series
 import numpy as np
 import btbox
@@ -23,11 +22,11 @@ def test_main_loop_on_dummy_data():
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop on dummy data'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # this contains the algo logics
             if i % 1000 == 0:
-                logger.info(dict(i=i, now=now, broker=broker))
-                assert now == broker._clock.now == broker._market._clock.now
+                logger.info(dict(i=i, now=broker.now, broker=broker))
+                assert broker.now == broker._clock.now == broker._market._clock.now
 
     btbox.create_job(CustomStrategy, dataframes).run()
 
@@ -38,10 +37,10 @@ def test_main_loop():
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # this contains the algo logics
             if i % 1000 == 0:
-                logger.info(dict(i=i, now=now, broker=broker))
-                assert now == broker._clock.now == broker._market._clock.now
+                logger.info(dict(i=i, now=broker.now, broker=broker))
+                assert broker.now == broker._clock.now == broker._market._clock.now
 
     btbox.create_job(CustomStrategy, dataframes).run()

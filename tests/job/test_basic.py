@@ -12,7 +12,7 @@ from btbox.market import Market
 class CustomStrategy(btbox.Strategy):
     name = 'Algo'
 
-    def step(self, i, now, broker):
+    def step(self, i: int, b: Broker):
         # this contains the algo logics
         pass
 

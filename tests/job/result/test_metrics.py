@@ -1,4 +1,3 @@
-from datetime import datetime
 from pandas import Series
 from pandas import to_datetime as dt
 import btbox
@@ -104,12 +103,13 @@ def test_metrics():
     class CustomStrategy(btbox.Strategy):
         name = 'test metrics'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             if i == 0:
                 broker.order.deposit(INI_CASH)
                 broker.portfolio.trade_target_weight(SYMBOL, TARGET_WEIGHT)
             if i % 1000 == 0:
-                logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
+                logger.info(dict(i=i, now=broker.now,
+                            SPY=broker.positions[SYMBOL]))
                 assert broker.report.trades.iloc[-1].Symbol == 'SPY'
                 assert round(broker.audit.nav_account() * TARGET_WEIGHT) == \
                     round(broker.audit.nav_position(SYMBOL))

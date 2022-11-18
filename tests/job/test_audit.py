@@ -1,4 +1,3 @@
-from datetime import datetime
 from btbox import create_job
 from btbox.broker import Broker
 from btbox.strategy import Strategy
@@ -17,12 +16,12 @@ def test_audit_cash():
     class CustomStrategy(Strategy):
         name = 'test audit cash'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # initial deposit
             if i == 0:
                 broker.order.deposit(INI_CASH)
             if i % 1000 == 0:
-                logger.info(dict(i=i, now=now, cash=broker.cash))
+                logger.info(dict(i=i, now=broker.now, cash=broker.cash))
                 assert broker.cash == INI_CASH
 
     create_job(CustomStrategy, dataframes).run()
@@ -35,12 +34,12 @@ def test_record_cash():
     class CustomStrategy(Strategy):
         name = 'test record cash'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # initial deposit
             if i == 0:
                 broker.order.deposit(INI_CASH)
             if i % 1000 == 0 and i > 0:
-                logger.info(dict(i=i, now=now, cash=broker.cash))
+                logger.info(dict(i=i, now=broker.now, cash=broker.cash))
                 assert broker.report.nav.iloc[-1] == INI_CASH
 
     create_job(CustomStrategy, dataframes).run()
@@ -55,7 +54,7 @@ def test_buy_stock():
     class CustomStrategy(Strategy):
         name = 'test buy stock'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # initial deposit
             if i == 0:
                 broker.order.deposit(INI_CASH)
@@ -63,9 +62,10 @@ def test_buy_stock():
                 broker.order.withdrawal(broker.cash)
                 assert broker.cash == 0
             if i % 1000 == 0 and i > 0:
-                logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
+                logger.info(dict(i=i, now=broker.now,
+                            SPY=broker.positions[SYMBOL]))
                 assert broker.positions[SYMBOL] == QUANTITY
-                assert broker.market.get_close_at(SYMBOL, now) * QUANTITY == \
+                assert broker.market.get_close_at(SYMBOL, broker.now) * QUANTITY == \
                     broker.audit.nav_account()
 
     create_job(CustomStrategy, dataframes).run()
@@ -80,13 +80,14 @@ def test_nav_report():
     class CustomStrategy(Strategy):
         name = 'test nav report'
 
-        def step(self, i: int, now: datetime, broker: Broker):
+        def step(self, i: int, broker: Broker):
             # initial deposit
             if i == 0:
                 broker.order.deposit(INI_CASH)
             if i % 1000 == 0:
                 broker.order.trade(SYMBOL, +QUANTITY)
-                logger.info(dict(i=i, now=now, SPY=broker.positions[SYMBOL]))
+                logger.info(dict(i=i, now=broker.now,
+                            SPY=broker.positions[SYMBOL]))
                 assert broker.report.trades.iloc[-1].Symbol == 'SPY'
                 assert broker.report.trades.Quantity.sum() == \
                     (i // 1000 + 1) * QUANTITY
