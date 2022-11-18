@@ -6,6 +6,7 @@ class Backtest:
     def __init__(self,
                  jobs: list[Job]) -> None:
         self._jobs = jobs
+        assert len({j.name for j in self._jobs}) == len(self._jobs)
 
     def run(self) -> Results:
         results = []

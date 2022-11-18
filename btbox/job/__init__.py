@@ -13,7 +13,15 @@ class Job:
         self._timeline = self._strategy.timeline
         self._clock = clock
 
+    @property
+    def name(self) -> str:
+        return self._strategy.name
+
     def run(self) -> Result:
+        # initialize clock
+        self._clock.sync(self._timeline[0], self)
+        # run the start function
+        self._strategy.initial(self._broker)
         # timeline loop
         for i, now in enumerate(self._timeline):
             # set now and sync across all objects
