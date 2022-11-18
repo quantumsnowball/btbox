@@ -14,7 +14,7 @@ logger.setLevel(logging.INFO)
 def test_dashboard():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
-    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class Benchmark(Strategy):
         name = 'Benchmark'
@@ -32,7 +32,7 @@ def test_dashboard():
                 b.order.deposit(INI_CASH)
                 b.portfolio.trade_target_weight(SYMBOL, 0.5)
 
-    bt = create_backtest([Benchmark, CustomStrategy], dataframes)
+    bt = create_backtest([Benchmark, CustomStrategy], dfs)
     results = bt.run()
     dashboard = results.dashboard()
     assert isinstance(dashboard, DataFrame)

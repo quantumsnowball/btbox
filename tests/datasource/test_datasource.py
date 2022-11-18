@@ -16,7 +16,7 @@ def test_all_market_functions():
     START = '2000-01-04'
     END = '2020-12-31'
     WINDOW = 100
-    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class Benchmark(Strategy):
         name = 'Benchmark'
@@ -29,9 +29,9 @@ def test_all_market_functions():
                 close = b.market.get_close(SYMBOL)
                 ohlcv = b.market.get_ohlcv(SYMBOL)
                 assert close == ohlcv.Close == \
-                    dataframes[SYMBOL].loc[b.now, 'Close']
+                    dfs[SYMBOL].loc[b.now, 'Close']
 
-    job = create_job(Benchmark, dataframes,
+    job = create_job(Benchmark, dfs,
                      start=START,
                      end=END,
                      window=WINDOW)
@@ -45,7 +45,7 @@ def test_start_end_window_timeline():
     START = '2010-01-04'
     END = '2020-12-31'
     WINDOW = 100
-    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class Benchmark(Strategy):
         name = 'Benchmark'
@@ -63,7 +63,7 @@ def test_start_end_window_timeline():
                 assert len(win_ohlcv) == WINDOW
                 assert win_ohlcv.index[-1] <= b.now
 
-    job = create_job(Benchmark, dataframes,
+    job = create_job(Benchmark, dfs,
                      start=START,
                      end=END,
                      window=WINDOW)

@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 def test_record_cash():
     INI_CASH = 1_234_567
-    dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class S1(Strategy):
         name = 'test record cash'
@@ -25,7 +25,7 @@ def test_record_cash():
                 logger.info(dict(i=i, now=b.now, cash=b.cash))
                 assert b.report.nav.iloc[-1] == INI_CASH
 
-    s1_nav = create_job(S1, dataframes).run().report.nav[-1]
+    s1_nav = create_job(S1, dfs).run().report.nav[-1]
 
     class S2(Strategy):
         name = 'test record cash using decorator'
@@ -36,6 +36,6 @@ def test_record_cash():
             logger.info(dict(now=b.now, cash=b.cash))
             assert b.report.nav.iloc[-1] == INI_CASH
 
-    s2_nav = create_job(S2, dataframes).run().report.nav[-1]
+    s2_nav = create_job(S2, dfs).run().report.nav[-1]
 
     assert s1_nav == s2_nav

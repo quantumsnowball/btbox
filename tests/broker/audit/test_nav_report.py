@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 def test_nav_report():
     SYMBOL = 'SPY'
     QUANTITY = 10
-    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(Strategy):
         name = 'test nav report'
@@ -27,4 +27,4 @@ def test_nav_report():
                 assert b.report.trades.Quantity.sum() == \
                     (i // 1000 + 1) * QUANTITY
 
-    create_job(CustomStrategy, dataframes).run()
+    create_job(CustomStrategy, dfs).run()

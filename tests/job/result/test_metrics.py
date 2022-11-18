@@ -98,7 +98,7 @@ def test_metrics():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     TARGET_WEIGHT = 1.0
-    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test metrics'
@@ -113,10 +113,10 @@ def test_metrics():
                 assert round(b.audit.nav_account() * TARGET_WEIGHT) == \
                     round(b.audit.nav_position(SYMBOL))
 
-    job = btbox.create_job(CustomStrategy, dataframes)
+    job = btbox.create_job(CustomStrategy, dfs)
     result = job.run()
 
-    ref_ts = dataframes[SYMBOL].Close
+    ref_ts = dfs[SYMBOL].Close
     assert result.metrics.total_return == Mt.total_return(ref_ts)
     assert result.metrics.cagr == Mt.cagr(ref_ts)
     assert round(result.metrics.mu_sigma[0], 4) == round(Mt.mu_sigma(

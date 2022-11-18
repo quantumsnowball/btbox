@@ -15,7 +15,7 @@ def test_main_loop_on_dummy_data():
     dates = Series(date_range(start='2010-01-01',
                    end='2020-12-31'), name='Date')
     columns = ['Open', 'High', 'Low', 'Close', 'Volume']
-    dataframes = {'SPY': DataFrame(
+    dfs = {'SPY': DataFrame(
         np.random.randint(0, 1000, size=(len(dates), 5)),
         columns=columns, index=dates)}
 
@@ -28,11 +28,11 @@ def test_main_loop_on_dummy_data():
                 logger.info(dict(i=i, now=b.now, broker=b))
                 assert b.now == b._clock.now == b._market._clock.now
 
-    btbox.create_job(CustomStrategy, dataframes).run()
+    btbox.create_job(CustomStrategy, dfs).run()
 
 
 def test_main_loop():
-    dataframes = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test main loop'
@@ -43,4 +43,4 @@ def test_main_loop():
                 logger.info(dict(i=i, now=b.now, broker=b))
                 assert b.now == b._clock.now == b._market._clock.now
 
-    btbox.create_job(CustomStrategy, dataframes).run()
+    btbox.create_job(CustomStrategy, dfs).run()
