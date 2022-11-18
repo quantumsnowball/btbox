@@ -25,5 +25,5 @@ class Strategy(ABC):
     @abstractmethod
     def step(self,
              i: int,
-             broker: Broker) -> None:
+             b: Broker) -> None:
         pass
