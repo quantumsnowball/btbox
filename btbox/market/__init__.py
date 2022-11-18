@@ -16,3 +16,23 @@ class Market:
     @property
     def timeline(self) -> list[datetime]:
         return self._timeline
+
+    @cache
+    def get_ohlcv(self,
+                  symbol: str) -> DataFrame:
+        return self._datasource.get_ohlcv_at(symbol,
+                                             self._clock.now)
+
+    @cache
+    def get_close(self,
+                  symbol: str) -> float:
+        return self._datasource.get_close_at(symbol,
+                                             self._clock.now)
+
+    @cache
+    def get_ohlcv_window(self,
+                         symbol: str,
+                         length: int) -> DataFrame:
+        return self._datasource.get_ohlcv_window_at(symbol,
+                                                    self._clock.now,
+                                                    length)
