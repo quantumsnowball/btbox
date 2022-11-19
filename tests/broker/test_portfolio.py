@@ -12,7 +12,7 @@ def test_target_weight():
     INI_CASH = 1e6
     SYMBOL = 'SPY'
     TARGET_WEIGHT = 0.5
-    dataframes = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+    dfs = {SYMBOL: import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
     class CustomStrategy(btbox.Strategy):
         name = 'test target weight'
@@ -29,4 +29,4 @@ def test_target_weight():
                 assert round(b.audit.nav_account() * TARGET_WEIGHT) == \
                     round(b.audit.nav_position(SYMBOL))
 
-    btbox.create_job(CustomStrategy, dataframes).run()
+    btbox.create_job(CustomStrategy, dfs).run()
