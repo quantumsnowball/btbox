@@ -1,4 +1,3 @@
-from btbox.broker import Broker
 from btbox.strategy import Strategy
 from btbox.datasource.utils import import_yahoo_csv
 from btbox.backtest.utils import create_backtest
@@ -27,3 +26,19 @@ def test_navs_values():
                               start='2020-01-01', window=30).run()
     assert results.navs.values.shape[1] == 4
     assert results.navs.values.iloc[-1].values.tolist() == [2e6, 5e6, 8e6, 1e7]
+
+
+def test_navs_plot(mocker):
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+
+    class S1(Strategy):
+        name = 'test-nav 2m'
+        capital = 2e6
+
+    results = create_backtest([S1], dfs, start='2020-01-01', window=30).run()
+    mocker.patch('btbox.backtest.results.navs.Navs.plot')
+    results.navs.plot()
+    results.navs.plot.assert_called_once()
+    mocker.patch('btbox.backtest.results.Results.plot')
+    results.plot()
+    results.plot.assert_called_once()
