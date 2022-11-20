@@ -1,10 +1,10 @@
+from typing import Callable
 from pandas.io.formats.style import Styler
+from btbox.backtest.results.navs import Navs
 from btbox.broker.report import Report
 from btbox.job.result import Result
-from pandas import DataFrame, concat
-import plotly.express as px
+from pandas import DataFrame
 from btbox.job.result.metrics import Metrics
-
 from btbox.strategy import Strategy
 
 
@@ -15,6 +15,7 @@ class Results:
         self._strategies = [r.strategy for r in self._results]
         self._reports = [r.report for r in self._results]
         self._metrics = list(r.metrics for r in self._results)
+        self._navs = Navs(self._reports, self._strategies)
 
     @property
     def results(self) -> list[Result]:
@@ -33,14 +34,12 @@ class Results:
         return self._metrics
 
     @property
-    def navs(self) -> DataFrame:
-        df = concat([r.nav for r in self._reports], axis=1)
-        df.columns = [s.name for s in self._strategies]
-        return df
+    def navs(self) -> Navs:
+        return self._navs
 
-    def plot(self, **line_kws):
-        fig = px.line(self.navs, **line_kws)
-        fig.show()
+    @property
+    def plot(self) -> Callable[..., None]:
+        return self._navs.plot
 
     def dashboard(self) -> DataFrame:
         names = [s.name for s in self._strategies]
