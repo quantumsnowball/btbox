@@ -23,7 +23,6 @@ def test_journals_plot():
     result = results['MarkMe']
     assert result.journals['Every 2 Days', 'Every 5 Days'].values.shape[1] == 2
     assert result.journals['Every 2 Days', 'Every 4 Days'].values.shape[1] == 2
-    assert 0
     # results['MarkMe'].journal['MACD(3,5,6)'].plot_under_nav()
     # results.journals['RSI(20)'].plot_under_benchmark()
     # results.chart['MarkMe'].marks.plot(overlay_nav=True)
