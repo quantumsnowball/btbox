@@ -1,10 +1,9 @@
 from datetime import datetime
-
 from pandas import DataFrame
 from btbox.share import Clock
 
 
-class Chart:
+class Journal:
     def __init__(self,
                  clock: Clock,
                  timeline: list[datetime]) -> None:

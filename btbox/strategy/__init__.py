@@ -1,7 +1,7 @@
 from datetime import datetime
 from btbox.share import Clock
 from btbox.broker import Broker
-from btbox.strategy.chart import Chart
+from btbox.strategy.journal import Journal
 
 
 DEFAULT_CAPITAL = 1e6
@@ -19,7 +19,7 @@ class Strategy:
         self._broker = broker
         self._timeline = self._broker.timeline
         self._clock = clock
-        self._chart = Chart(self._clock, self._timeline)
+        self._journal = Journal(self._clock, self._timeline)
         self._broker.order.deposit(self.capital)
 
     @property
@@ -31,8 +31,8 @@ class Strategy:
         return self._broker
 
     @property
-    def chart(self) -> Chart:
-        return self._chart
+    def journal(self) -> Journal:
+        return self._journal
 
     def initial(self,
                 b: Broker) -> None:

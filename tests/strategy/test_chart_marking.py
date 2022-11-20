@@ -13,13 +13,13 @@ def test_chart_marking():
 
         def step(self, i: int, b: Broker):
             if i % 2 == 0 and i > 0:
-                self.chart.mark(2, 'Every 2 Days')
+                self.journal.mark(2, 'Every 2 Days')
             if i % 4 == 0 and i > 0:
-                self.chart.mark(4, 'Every 4 Days')
+                self.journal.mark(4, 'Every 4 Days')
 
     results = create_backtest(
         [S1, ], dfs, start='2020-01-01', window=30).run()
-    dfm = results.strategies[0].chart.marks
+    dfm = results.strategies[0].journal.marks
     assert len(dfm) == len(results.strategies[0].timeline)
     assert dfm.shape[1] == 2
     assert isnan(dfm.iloc[0, 0]) and isnan(dfm.iloc[0, 1])
@@ -29,6 +29,3 @@ def test_chart_marking():
     assert dfm.iloc[4, 0] == 2 and dfm.iloc[4, 1] == 4
     assert isnan(dfm.iloc[5, 0]) and isnan(dfm.iloc[5, 1])
     assert dfm.iloc[6, 0] == 2 and isnan(dfm.iloc[6, 1])
-    # results.charts[0].plot_marks(nav=True)
-    # results.chart.plot()
-    # results.chart['MarkMe'].marks.plot(overlay_nav=True)
