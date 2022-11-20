@@ -6,15 +6,15 @@ from btbox.strategy import Strategy
 
 class Navs:
     def __init__(self,
-                 reports: list[Report],
-                 strategies: list[Strategy]) -> None:
+                 reports: dict[str, Report],
+                 strategies: dict[str, Strategy]) -> None:
         self._reports = reports
         self._strategies = strategies
 
     @property
     def values(self) -> DataFrame:
-        df = concat([r.nav for r in self._reports], axis=1)
-        df.columns = [s.name for s in self._strategies]
+        df = concat([r.nav for r in self._reports.values()], axis=1)
+        df.columns = self._strategies.keys()
         return df
 
     def plot(self, **line_kws) -> None:

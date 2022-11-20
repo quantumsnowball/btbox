@@ -19,8 +19,8 @@ def test_chart_marking():
 
     results = create_backtest(
         [S1, ], dfs, start='2020-01-01', window=30).run()
-    dfm = results.strategies[0].journal.marks
-    assert len(dfm) == len(results.strategies[0].timeline)
+    dfm = results.strategies['MarkMe'].journal.marks
+    assert len(dfm) == len(results.strategies['MarkMe'].timeline)
     assert dfm.shape[1] == 2
     assert isnan(dfm.iloc[0, 0]) and isnan(dfm.iloc[0, 1])
     assert isnan(dfm.iloc[1, 0]) and isnan(dfm.iloc[1, 1])
