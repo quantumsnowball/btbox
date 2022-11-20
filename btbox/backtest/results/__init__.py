@@ -21,8 +21,9 @@ class Results:
 
     @cache
     def __getitem__(self, name: str) -> Selected:
+        strategy = self._strategies[name]
         report = self._reports[name]
-        return Selected(name, report)
+        return Selected(name, strategy, report)
 
     @property
     def results(self) -> dict[str, Result]:
