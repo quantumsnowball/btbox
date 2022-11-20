@@ -1,3 +1,4 @@
+from functools import cache
 from typing import Callable
 from pandas.io.formats.style import Styler
 from btbox.backtest.results.navs import Navs
@@ -18,9 +19,10 @@ class Results:
         self._metrics = {n: r.metrics for n, r in self._results.items()}
         self._navs = Navs(self._reports, self._strategies)
 
+    @cache
     def __getitem__(self, name: str) -> Selected:
-        # TODO: select the strategy with all its results
-        return Selected()
+        report = self._reports[name]
+        return Selected(name, report)
 
     @property
     def results(self) -> dict[str, Result]:
