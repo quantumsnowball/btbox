@@ -9,8 +9,13 @@ class Result:
                  strategy: Strategy,
                  report: Report):
         self._strategy = strategy
+        self._name = strategy.name
         self._report = report
         self._metrics = Metrics(self._strategy, self._report)
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def strategy(self) -> Strategy:
