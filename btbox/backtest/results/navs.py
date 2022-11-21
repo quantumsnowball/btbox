@@ -1,3 +1,4 @@
+from typing import Any
 from pandas import DataFrame, concat
 import plotly.express as px
 from btbox.broker.report import Report
@@ -17,6 +18,6 @@ class Navs:
         df.columns = self._strategies.keys()
         return df
 
-    def plot(self, **line_kws) -> None:
+    def plot(self, **line_kws: Any) -> None:
         fig = px.line(self.values, **line_kws)
         fig.show()

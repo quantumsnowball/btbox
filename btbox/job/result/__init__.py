@@ -1,3 +1,4 @@
+from typing import Any
 from btbox.broker.report import Report
 from btbox.job.result.metrics import Metrics
 from btbox.strategy import Strategy
@@ -29,7 +30,7 @@ class Result:
     def metrics(self) -> Metrics:
         return self._metrics
 
-    def plot(self, **line_kws) -> None:
+    def plot(self, **line_kws: Any) -> None:
         fig = px.line(x=self._report.nav.index,
                       y=self._report.nav,
                       **line_kws)

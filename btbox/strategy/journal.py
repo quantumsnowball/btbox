@@ -9,7 +9,7 @@ class Journal:
                  timeline: list[datetime]) -> None:
         self._clock = clock
         self._timeline = timeline
-        self._data: dict[datetime, dict] = {}
+        self._data: dict[datetime, dict[str, float | int | bool | None]] = {}
 
     @property
     def marks(self) -> DataFrame:

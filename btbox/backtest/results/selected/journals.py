@@ -44,6 +44,6 @@ class Journals:
         self._name = name
         self._marks = journal.marks
 
-    def __getitem__(self, names: Iterable[str]):
+    def __getitem__(self, names: Iterable[str]) -> FilteredMarks:
         df = self._marks.loc[:, names]
         return FilteredMarks(self._name, df)

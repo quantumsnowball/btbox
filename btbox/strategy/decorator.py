@@ -17,14 +17,14 @@ def interval(n: int,
         @wraps(fn_step)
         def wrpfn_step(self,
                        i: int,
-                       b: Broker) -> None:
+                       b: Broker) -> Any:
             if i % n == 0:
                 return fn_step(self, b)
 
         @wraps(fn_step)
         def wrpfn_step_skip_initial(self,
                                     i: int,
-                                    b: Broker) -> None:
+                                    b: Broker) -> Any:
             if i % n == 0 and i > 0:
                 return fn_step(self, b)
 

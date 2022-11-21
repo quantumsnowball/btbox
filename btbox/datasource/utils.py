@@ -2,11 +2,6 @@ from datetime import datetime
 from pandas import to_datetime, read_csv, DataFrame
 
 
-class Parser:
-    def __init__(self):
-        pass
-
-
 def parse_start_end_window(
         first_ohlcv: DataFrame,
         start: datetime | str | None,

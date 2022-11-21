@@ -66,7 +66,7 @@ class Results:
 
     def dashboard_pretty(self) -> Styler:
         raw = self.dashboard()
-        pretty = raw.style.format({
+        pretty: Styler = raw.style.format({
             'return': '{:,.1%}',
             'cagr': '{:.2%}',
             'mu': '{:.2%}',
