@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from btbox.backtest.results.selected.journals import Journals
 from btbox.backtest.results.selected.nav import Nav
-from btbox.broker.report import Report
+from btbox.job.result import Result
 from btbox.strategy import Strategy
 
 
@@ -9,13 +9,13 @@ class Selected:
     def __init__(self,
                  name: str,
                  strategy: Strategy,
-                 report: Report) -> None:
+                 result: Result) -> None:
         self._name = name
         self._strategy = strategy
-        self._report = report
-        self._nav = Nav(self._name, self._report.nav)
+        self._result = result
+        self._nav = Nav(self._name, self._result)
         self._journals = Journals(
-            self._name, self._report.nav, self._strategy.journal)
+            self._name, self._result, self._strategy.journal)
 
     @property
     def nav(self) -> Nav:
