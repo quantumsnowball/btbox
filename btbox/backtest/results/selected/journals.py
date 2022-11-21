@@ -5,6 +5,10 @@ from functools import wraps
 import plotly.express as px
 
 
+T_fn_plot = Callable[..., None]
+R_set_default_title = Callable[[T_fn_plot], None]
+
+
 class FilteredMarks:
     def __init__(self,
                  name: str,
@@ -13,12 +17,12 @@ class FilteredMarks:
         self._filtered = filtered
 
     @staticmethod
-    def set_default_title(func) -> Callable[..., None]:
-        @wraps(func)
-        def wrapped(self, *args, **kwargs) -> None:
+    def set_default_title(fn_plot: T_fn_plot) -> R_set_default_title:
+        @wraps(fn_plot)
+        def wrapped(self, **kwargs) -> None:
             if 'title' not in kwargs:
                 kwargs['title'] = self._name
-            return func(self, *args, **kwargs)
+            return fn_plot(self, **kwargs)
         return wrapped
 
     @property
