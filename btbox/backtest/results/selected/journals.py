@@ -1,12 +1,12 @@
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, ParamSpec, TypeVar
 from pandas import DataFrame
 from btbox.strategy.journal import Journal
 from functools import wraps
 import plotly.express as px
 
 
-T_fn_plot = Callable[..., None]
-R_set_default_title = Callable[[T_fn_plot], None]
+P = ParamSpec('P')
+R = TypeVar('R')
 
 
 class FilteredMarks:
@@ -17,13 +17,13 @@ class FilteredMarks:
         self._filtered = filtered
 
     @staticmethod
-    def set_default_title(fn_plot: T_fn_plot) -> R_set_default_title:
+    def set_default_title(fn_plot: Callable[P, R]) -> Callable[P, R]:
         @wraps(fn_plot)
-        def wrapped(*args: Any,
-                    **kwargs: Any) -> None:
-            self: FilteredMarks = args[0]
-            if 'title' not in kwargs:
-                kwargs['title'] = self._name
+        def wrapped(*args: P.args,
+                    **kwargs: P.kwargs) -> R:
+            if isinstance(args[0], FilteredMarks):
+                if 'title' not in kwargs:
+                    kwargs['title'] = args[0]._name
             return fn_plot(*args, **kwargs)
         return wrapped
 
