@@ -36,9 +36,9 @@ def test_navs_plot(mocker):
         capital = 2e6
 
     results = create_backtest([S1], dfs, start='2020-01-01', window=30).run()
-    mocker.patch('btbox.backtest.results.navs.Navs.plot')
+    fn_line = mocker.patch('btbox.backtest.results.navs.px.line')
     results.navs.plot()
-    results.navs.plot.assert_called_once()
-    mocker.patch('btbox.backtest.results.Results.plot')
+    fn_line.assert_called_once()
+    fn_line.reset_mock()
     results.plot()
-    results.plot.assert_called_once()
+    fn_line.assert_called_once()

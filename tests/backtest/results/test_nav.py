@@ -16,9 +16,9 @@ def test_nav_plot(mocker):
             b.portfolio.trade_target_weight('SPY', 0.5)
 
     results = create_backtest([S1, ], dfs, start='2020-01-01').run()
-    mocker.patch('btbox.backtest.results.selected.nav.Nav.plot')
+    fn_line = mocker.patch('btbox.backtest.results.selected.nav.px.line')
     results['MarkMe'].nav.plot()
-    results['MarkMe'].nav.plot.assert_called_once()
-    mocker.patch('btbox.backtest.results.selected.Selected.plot')
+    fn_line.assert_called_once()
+    fn_line.reset_mock()
     results['MarkMe'].plot()
-    results['MarkMe'].plot.assert_called_once()
+    fn_line.assert_called_once()

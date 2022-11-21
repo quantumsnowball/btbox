@@ -23,10 +23,10 @@ def test_plot_scatter(mocker):
     result = results['MarkMe']
     assert result.journals['Every 2 Days', 'Every 5 Days'].values.shape[1] == 2
     assert result.journals['Every 2 Days', 'Every 4 Days'].values.shape[1] == 2
-    scatter = mocker.patch(
+    fn_scatter = mocker.patch(
         'btbox.backtest.results.selected.journals.px.scatter')
     result.journals['Every 2 Days', 'Every 5 Days'].plot_scatter()
-    scatter.assert_called_once()
+    fn_scatter.assert_called_once()
 
     # results['MarkMe'].journal['MACD(3,5,6)'].plot_under_nav()
     # results.journals['RSI(20)'].plot_under_benchmark()
