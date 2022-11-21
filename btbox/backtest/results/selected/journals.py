@@ -49,13 +49,17 @@ class FilteredMarks:
 
     def plot_scatter_on_nav(self) -> None:
         fig = Figure()
-        fig.add_trace(Scatter(x=self._nav.index,
-                              y=self._nav))
-        for _, sr in self._filtered.items():
+        fig.add_trace(
+            Scatter(
+                name='NAV',
+                x=self._nav.index,
+                y=self._nav))
+        for name, sr in self._filtered.items():
             points = self._nav[~sr.isnull()]
             fig.add_trace(
                 Scatter(
                     mode='markers',
+                    name=name,
                     x=points.index,
                     y=points,
                     marker=dict(size=10)))
@@ -64,13 +68,17 @@ class FilteredMarks:
     def plot_scatter_on_price(self, symbol: str) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
         fig = Figure()
-        fig.add_trace(Scatter(x=price.index,
-                              y=price))
-        for _, sr in self._filtered.items():
+        fig.add_trace(
+            Scatter(
+                name=symbol,
+                x=price.index,
+                y=price))
+        for name, sr in self._filtered.items():
             points = price[~sr.isnull()]
             fig.add_trace(
                 Scatter(
                     mode='markers',
+                    name=name,
                     x=points.index,
                     y=points,
                     marker=dict(size=10)))
@@ -78,21 +86,31 @@ class FilteredMarks:
 
     def plot_line_under_nav(self) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.add_trace(Scatter(x=self._nav.index,
-                              y=self._nav), row=1, col=1)
-        for _, sr in self._filtered.items():
-            fig.add_trace(Scatter(x=sr.index,
-                                  y=sr), row=2, col=1)
+        fig.add_trace(
+            Scatter(
+                name='NAV',
+                x=self._nav.index,
+                y=self._nav), row=1, col=1)
+        for name, sr in self._filtered.items():
+            fig.add_trace(
+                Scatter(
+                    name=name,
+                    x=sr.index,
+                    y=sr), row=2, col=1)
         fig.show()
 
     def plot_scatter_under_nav(self) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.add_trace(Scatter(x=self._nav.index,
-                              y=self._nav), row=1, col=1)
-        for _, sr in self._filtered.items():
+        fig.add_trace(
+            Scatter(
+                name='NAV',
+                x=self._nav.index,
+                y=self._nav), row=1, col=1)
+        for name, sr in self._filtered.items():
             fig.add_trace(
                 Scatter(
                     mode='markers',
+                    name=name,
                     x=sr.index,
                     y=sr,
                     marker=dict(size=10)),
