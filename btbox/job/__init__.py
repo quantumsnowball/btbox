@@ -1,3 +1,4 @@
+from btbox.datasource import DataSource
 from btbox.share import Clock
 from btbox.job.result import Result
 from btbox.strategy import Strategy
@@ -6,9 +7,11 @@ from btbox.strategy import Strategy
 class Job:
     def __init__(self,
                  strategy: Strategy,
+                 datasource: DataSource,
                  clock: Clock) -> None:
         assert isinstance(strategy, Strategy)
         self._strategy = strategy
+        self._datasource = datasource
         self._broker = self._strategy.broker
         self._timeline = self._strategy.timeline
         self._clock = clock
@@ -30,4 +33,4 @@ class Job:
             self._strategy.step(i, self._broker)
             # do daily settlement
             self._broker.settlement()
-        return Result(self._strategy, self._broker.report)
+        return Result(self._strategy, self._broker.report, self._datasource)

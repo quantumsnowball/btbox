@@ -1,6 +1,7 @@
 from typing import Any, Callable, Iterable, ParamSpec, TypeVar
 from pandas import DataFrame, Series
 from plotly.graph_objects import Figure, Scatter
+from btbox.job.result import Result
 from btbox.strategy.journal import Journal
 from functools import wraps
 import plotly.express as px
@@ -14,10 +15,11 @@ R = TypeVar('R')
 class FilteredMarks:
     def __init__(self,
                  name: str,
-                 nav: Series,
+                 result: Result,
                  filtered: DataFrame) -> None:
         self._name = name
-        self._nav = nav
+        self._result = result
+        self._nav = self._result.report.nav
         self._filtered = filtered
 
     @staticmethod
@@ -59,6 +61,21 @@ class FilteredMarks:
                     marker=dict(size=10)))
         fig.show()
 
+    def plot_scatter_on_price(self, symbol: str) -> None:
+        price = self._result.datasource.get_dataframe(symbol).Close
+        fig = Figure()
+        fig.add_trace(Scatter(x=price.index,
+                              y=price))
+        for _, sr in self._filtered.items():
+            points = price[~sr.isnull()]
+            fig.add_trace(
+                Scatter(
+                    mode='markers',
+                    x=points.index,
+                    y=points,
+                    marker=dict(size=10)))
+        fig.show()
+
     def plot_line_under_nav(self) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
         fig.add_trace(Scatter(x=self._nav.index,
@@ -86,12 +103,13 @@ class FilteredMarks:
 class Journals:
     def __init__(self,
                  name: str,
-                 nav: Series,
+                 result: Result,
                  journal: Journal) -> None:
         self._name = name
-        self._nav = nav
+        self._result = result
+        self._nav = self._result.report.nav
         self._marks = journal.marks
 
     def __getitem__(self, names: Iterable[str]) -> FilteredMarks:
         df = self._marks.loc[:, names]
-        return FilteredMarks(self._name, self._nav, df)
+        return FilteredMarks(self._name, self._result, df)
