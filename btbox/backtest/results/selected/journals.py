@@ -3,6 +3,7 @@ from pandas import DataFrame
 from btbox.strategy.journal import Journal
 from functools import wraps
 import plotly.express as px
+from plotly.tools import make_subplots
 
 
 P = ParamSpec('P')
@@ -32,13 +33,13 @@ class FilteredMarks:
         return self._filtered
 
     @set_default_title
-    def plot_line(self, **line_kws: Any) -> None:
-        fig = px.line(self._filtered, **line_kws)
+    def plot_line(self, **kwargs_line: Any) -> None:
+        fig = px.line(self._filtered, **kwargs_line)
         fig.show()
 
     @set_default_title
-    def plot_scatter(self, **line_kws: Any) -> None:
-        fig = px.scatter(self._filtered, **line_kws)
+    def plot_scatter(self, **kwargs_scatter: Any) -> None:
+        fig = px.scatter(self._filtered, **kwargs_scatter)
         fig.show()
 
 

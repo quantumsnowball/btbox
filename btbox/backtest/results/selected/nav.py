@@ -10,8 +10,8 @@ class Nav:
         self._name = name
         self._nav = nav
 
-    def plot(self, **line_kws: Any) -> None:
-        if 'title' not in line_kws:
-            line_kws['title'] = self._name
-        fig = px.line(self._nav, **line_kws)
+    def plot(self, **kwargs_line: Any) -> None:
+        if 'title' not in kwargs_line:
+            kwargs_line['title'] = self._name
+        fig = px.line(self._nav, **kwargs_line)
         fig.show()

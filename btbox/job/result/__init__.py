@@ -30,8 +30,8 @@ class Result:
     def metrics(self) -> Metrics:
         return self._metrics
 
-    def plot(self, **line_kws: Any) -> None:
+    def plot(self, **kwargs_line: Any) -> None:
         fig = px.line(x=self._report.nav.index,
                       y=self._report.nav,
-                      **line_kws)
+                      **kwargs_line)
         fig.show()

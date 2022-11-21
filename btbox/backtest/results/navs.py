@@ -18,6 +18,6 @@ class Navs:
         df.columns = self._strategies.keys()
         return df
 
-    def plot(self, **line_kws: Any) -> None:
-        fig = px.line(self.values, **line_kws)
+    def plot(self, **kwargs_line: Any) -> None:
+        fig = px.line(self.values, **kwargs_line)
         fig.show()
