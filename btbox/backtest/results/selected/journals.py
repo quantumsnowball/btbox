@@ -1,6 +1,6 @@
 from typing import Any, Callable, Iterable, ParamSpec, TypeVar
 from pandas import DataFrame, Series
-from plotly.graph_objects import Scatter
+from plotly.graph_objects import Figure, Scatter
 from btbox.strategy.journal import Journal
 from functools import wraps
 import plotly.express as px
@@ -43,6 +43,20 @@ class FilteredMarks:
     @set_default_title
     def plot_scatter(self, **kwargs_scatter: Any) -> None:
         fig = px.scatter(self._filtered, **kwargs_scatter)
+        fig.show()
+
+    def plot_scatter_on_nav(self) -> None:
+        fig = Figure()
+        fig.add_trace(Scatter(x=self._nav.index,
+                              y=self._nav))
+        for _, sr in self._filtered.items():
+            points = self._nav[~sr.isnull()]
+            fig.add_trace(
+                Scatter(
+                    mode='markers',
+                    x=points.index,
+                    y=points,
+                    marker=dict(size=10)))
         fig.show()
 
     def plot_line_under_nav(self) -> None:
