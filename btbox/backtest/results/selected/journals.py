@@ -23,32 +23,37 @@ class FilteredMarks:
         self._filtered = filtered
 
     @staticmethod
-    def set_default_title(fn_plot: Callable[P, R]) -> Callable[P, R]:
-        @wraps(fn_plot)
-        def wrapped(*args: P.args,
-                    **kwargs: P.kwargs) -> R:
-            if isinstance(args[0], FilteredMarks):
-                if 'title' not in kwargs:
-                    kwargs['title'] = args[0]._name
-            return fn_plot(*args, **kwargs)
-        return wrapped
+    def set_default_title(name: str) \
+            -> Callable[[Callable[P, R]], Callable[P, R]]:
+        def wrapper_fn_plot(fn_plot: Callable[P, R]) -> Callable[P, R]:
+            @wraps(fn_plot)
+            def wrapped_fn_plot(*args: P.args,
+                                **kwargs: P.kwargs) -> R:
+                if isinstance(args[0], FilteredMarks):
+                    if name not in kwargs:
+                        kwargs[name] = args[0]._name
+                return fn_plot(*args, **kwargs)
+            return wrapped_fn_plot
+        return wrapper_fn_plot
 
     @property
     def values(self) -> DataFrame:
         return self._filtered
 
-    @set_default_title
+    @set_default_title('title')
     def plot_line(self, **kwargs_line: Any) -> None:
         fig = px.line(self._filtered, **kwargs_line)
         fig.show()
 
-    @set_default_title
+    @set_default_title('title')
     def plot_scatter(self, **kwargs_scatter: Any) -> None:
         fig = px.scatter(self._filtered, **kwargs_scatter)
         fig.show()
 
-    def plot_scatter_on_nav(self) -> None:
+    @set_default_title('title')
+    def plot_scatter_on_nav(self, **kwargs_update_layout: Any) -> None:
         fig = Figure()
+        fig.update_layout(**kwargs_update_layout)
         fig.add_trace(
             Scatter(
                 name='NAV',
@@ -68,6 +73,7 @@ class FilteredMarks:
     def plot_scatter_on_price(self, symbol: str) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
         fig = Figure()
+        fig.update_layout(title=symbol)
         fig.add_trace(
             Scatter(
                 name=symbol,
@@ -84,8 +90,10 @@ class FilteredMarks:
                     marker=dict(size=10)))
         fig.show()
 
-    def plot_line_under_nav(self) -> None:
+    @set_default_title('title')
+    def plot_line_under_nav(self, **kwargs_update_layout: Any) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
+        fig.update_layout(**kwargs_update_layout)
         fig.add_trace(
             Scatter(
                 name='NAV',
@@ -99,8 +107,10 @@ class FilteredMarks:
                     y=sr), row=2, col=1)
         fig.show()
 
-    def plot_scatter_under_nav(self) -> None:
+    @set_default_title('title')
+    def plot_scatter_under_nav(self, **kwargs_update_layout: Any) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
+        fig.update_layout(**kwargs_update_layout)
         fig.add_trace(
             Scatter(
                 name='NAV',
