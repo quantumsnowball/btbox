@@ -70,10 +70,13 @@ class FilteredMarks:
                     marker=dict(size=10)))
         fig.show()
 
-    def plot_scatter_on_price(self, symbol: str) -> None:
+    @set_default_title('title')
+    def plot_scatter_on_price(self,
+                              symbol: str,
+                              **kwargs_update_layout: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
         fig = Figure()
-        fig.update_layout(title=symbol)
+        fig.update_layout(**kwargs_update_layout)
         fig.add_trace(
             Scatter(
                 name=symbol,
