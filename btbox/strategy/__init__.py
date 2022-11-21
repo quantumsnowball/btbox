@@ -1,4 +1,4 @@
-from datetime import datetime
+from pandas import DatetimeIndex
 from btbox.share import Clock
 from btbox.broker import Broker
 from btbox.strategy.journal import Journal
@@ -23,7 +23,7 @@ class Strategy:
         self._broker.order.deposit(self.capital)
 
     @property
-    def timeline(self) -> list[datetime]:
+    def timeline(self) -> DatetimeIndex:
         return self._timeline
 
     @property

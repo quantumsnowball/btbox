@@ -1,5 +1,13 @@
 from datetime import datetime
-from pandas import to_datetime, read_csv, DataFrame
+from pandas import DatetimeIndex, to_datetime, read_csv, DataFrame
+
+
+def extract_timeline(start: datetime,
+                     end: datetime,
+                     df: DataFrame) -> DatetimeIndex:
+    index = df.loc[start: end].index
+    assert isinstance(index, DatetimeIndex)
+    return index
 
 
 def parse_start_end_window(

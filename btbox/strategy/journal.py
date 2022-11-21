@@ -1,12 +1,12 @@
 from datetime import datetime
-from pandas import DataFrame
+from pandas import DataFrame, DatetimeIndex
 from btbox.share import Clock
 
 
 class Journal:
     def __init__(self,
                  clock: Clock,
-                 timeline: list[datetime]) -> None:
+                 timeline: DatetimeIndex) -> None:
         self._clock = clock
         self._timeline = timeline
         self._data: dict[datetime, dict[str, float | int | bool | None]] = {}

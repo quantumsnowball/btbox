@@ -1,7 +1,8 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame, DatetimeIndex, Series
 from datetime import datetime
 from functools import cache
 from btbox.datasource.utils import (
+    extract_timeline,
     parse_start_end_window,
     trim_ohlcv_length,
 )
@@ -23,11 +24,12 @@ class DataSource:
         self._dataframes = {
             k: trim_ohlcv_length(df, trim_from, trim_to)
             for k, df in dataframes.items()}
-        self._timeline = next(iter(self._dataframes.values())
-                              ).loc[self._start:self._end].index.to_list()
+        self._timeline = extract_timeline(
+            self._start, self._end,
+            next(iter(self._dataframes.values())))
 
     @property
-    def timeline(self) -> list[datetime]:
+    def timeline(self) -> DatetimeIndex:
         return self._timeline
 
     @cache
