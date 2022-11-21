@@ -1,5 +1,5 @@
 from typing import Any, Callable, Iterable, ParamSpec, TypeVar
-from pandas import DataFrame, Series
+from pandas import DataFrame
 from plotly.graph_objects import Figure, Scatter
 from btbox.job.result import Result
 from btbox.strategy.journal import Journal
@@ -23,7 +23,7 @@ class FilteredMarks:
         self._filtered = filtered
 
     @staticmethod
-    def set_default_title(name: str) \
+    def set_default_title(name: str = 'title') \
             -> Callable[[Callable[P, R]], Callable[P, R]]:
         def wrapper_fn_plot(fn_plot: Callable[P, R]) -> Callable[P, R]:
             @wraps(fn_plot)
@@ -40,17 +40,17 @@ class FilteredMarks:
     def values(self) -> DataFrame:
         return self._filtered
 
-    @set_default_title('title')
+    @set_default_title()
     def plot_line(self, **kwargs_line: Any) -> None:
         fig = px.line(self._filtered, **kwargs_line)
         fig.show()
 
-    @set_default_title('title')
+    @set_default_title()
     def plot_scatter(self, **kwargs_scatter: Any) -> None:
         fig = px.scatter(self._filtered, **kwargs_scatter)
         fig.show()
 
-    @set_default_title('title')
+    @set_default_title()
     def plot_scatter_on_nav(self, **kwargs_update_layout: Any) -> None:
         fig = Figure()
         fig.update_layout(**kwargs_update_layout)
@@ -70,7 +70,7 @@ class FilteredMarks:
                     marker=dict(size=10)))
         fig.show()
 
-    @set_default_title('title')
+    @set_default_title()
     def plot_scatter_on_price(self,
                               symbol: str,
                               **kwargs_update_layout: Any) -> None:
@@ -93,7 +93,7 @@ class FilteredMarks:
                     marker=dict(size=10)))
         fig.show()
 
-    @set_default_title('title')
+    @set_default_title()
     def plot_line_under_nav(self, **kwargs_update_layout: Any) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
         fig.update_layout(**kwargs_update_layout)
@@ -110,7 +110,7 @@ class FilteredMarks:
                     y=sr), row=2, col=1)
         fig.show()
 
-    @set_default_title('title')
+    @set_default_title()
     def plot_scatter_under_nav(self, **kwargs_update_layout: Any) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
         fig.update_layout(**kwargs_update_layout)
