@@ -36,6 +36,11 @@ class FilteredMarks:
         fig = px.line(self._filtered, **line_kws)
         fig.show()
 
+    @set_default_title
+    def plot_scatter(self, **line_kws: Any) -> None:
+        fig = px.scatter(self._filtered, **line_kws)
+        fig.show()
+
 
 class Journals:
     def __init__(self,
