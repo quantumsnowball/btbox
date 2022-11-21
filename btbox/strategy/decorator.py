@@ -4,25 +4,25 @@ from btbox.strategy import Strategy
 from btbox.broker import Broker
 
 
-St = TypeVar('St', bound=Strategy)
-T_fn_step = Callable[[St, Broker], Any]
-R_decorator = Callable[[St, int, Broker], Any]
-R_interval = Callable[[T_fn_step], R_decorator]
+ST = TypeVar('ST', bound=Strategy)
+T_fn_step = Callable[[ST, Broker], Any]
+R_decorator = Callable[[ST, int, Broker], Any]
+R_interval = Callable[[T_fn_step[ST]], R_decorator[ST]]
 
 
 def interval(n: int,
              *,
-             initial: bool = True) -> R_interval:
-    def decorator(fn_step: T_fn_step) -> R_decorator:
+             initial: bool = True) -> R_interval[ST]:
+    def decorator(fn_step: T_fn_step[ST]) -> R_decorator[ST]:
         @wraps(fn_step)
-        def wrpfn_step(self,
+        def wrpfn_step(self: ST,
                        i: int,
                        b: Broker) -> Any:
             if i % n == 0:
                 return fn_step(self, b)
 
         @wraps(fn_step)
-        def wrpfn_step_skip_initial(self,
+        def wrpfn_step_skip_initial(self: ST,
                                     i: int,
                                     b: Broker) -> Any:
             if i % n == 0 and i > 0:

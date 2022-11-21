@@ -36,22 +36,28 @@ class DataSource:
     def get_ohlcv_at(self,
                      symbol: str,
                      at: datetime) -> DataFrame:
-        return self._dataframes[symbol].loc[at]
+        ohlcv: DataFrame = self._dataframes[symbol].loc[at]
+        return ohlcv
 
     @cache
     def get_close_at(self,
                      symbol: str,
                      at: datetime) -> float:
-        return self._dataframes[symbol].at[at, 'Close']
+        close: float = self._dataframes[symbol].at[at, 'Close']
+        return close
 
     @cache
     def get_ohlcv_window_at(self,
                             symbol: str,
                             on: datetime) -> DataFrame:
-        return self._dataframes[symbol].loc[:on].iloc[-self._window:]
+        ohlcv_window: DataFrame = \
+            self._dataframes[symbol].loc[:on].iloc[-self._window:]
+        return ohlcv_window
 
     @cache
     def get_close_window_at(self,
                             symbol: str,
                             on: datetime) -> Series:
-        return self._dataframes[symbol].Close.loc[:on].iloc[-self._window:]
+        close_window: Series = \
+            self._dataframes[symbol].Close.loc[:on].iloc[-self._window:]
+        return close_window
