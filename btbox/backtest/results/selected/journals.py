@@ -61,6 +61,21 @@ class FilteredMarks:
                     marker=dict(size=10)))
         fig.show()
 
+    def plot_scatter_on_price(self, symbol: str) -> None:
+        price = self._result.datasource.get_dataframe(symbol).Close
+        fig = Figure()
+        fig.add_trace(Scatter(x=price.index,
+                              y=price))
+        for _, sr in self._filtered.items():
+            points = price[~sr.isnull()]
+            fig.add_trace(
+                Scatter(
+                    mode='markers',
+                    x=points.index,
+                    y=points,
+                    marker=dict(size=10)))
+        fig.show()
+
     def plot_line_under_nav(self) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
         fig.add_trace(Scatter(x=self._nav.index,
@@ -83,12 +98,6 @@ class FilteredMarks:
                     marker=dict(size=10)),
                 row=2, col=1)
         fig.show()
-
-    def plot_scatter_on(self, *names: str):
-        fig = Figure()
-        for name in names:
-            fig.add_trace(Scatter(x=self._filtered.index,
-                                  y=self._filtered[names]))
 
 
 class Journals:
