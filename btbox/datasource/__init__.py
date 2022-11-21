@@ -34,7 +34,8 @@ class DataSource:
 
     def get_dataframe(self,
                       symbol: str) -> DataFrame:
-        return self._dataframes[symbol]
+        dataframe = self._dataframes[symbol].reindex(self._timeline)
+        return dataframe
 
     @cache
     def get_ohlcv_at(self,
