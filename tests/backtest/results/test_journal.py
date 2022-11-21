@@ -24,6 +24,29 @@ def test_plot_line(mocker):
     fn_line.assert_called_once()
 
 
+def test_plot_line_under_nav(mocker):
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+
+    class S1(Strategy):
+        name = 'Nav-Line'
+
+        @interval(1)
+        def step(self, b: Broker):
+            self.journal.mark(8888, 'line-8888')
+            self.journal.mark(9999, 'line-9999')
+
+    results = create_backtest(
+        [S1, ], dfs, start='2020-01-01', window=30).run()
+    result = results['Nav-Line']
+    fn_make_subplots = mocker.patch(
+        'btbox.backtest.results.selected.journals.make_subplots')
+    fn_Scatter = mocker.patch(
+        'btbox.backtest.results.selected.journals.Scatter')
+    result.journals['line-8888', 'line-9999'].plot_line_under_nav()
+    fn_make_subplots.assert_called_once()
+    fn_Scatter.assert_called()
+
+
 def test_plot_scatter(mocker):
     dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 

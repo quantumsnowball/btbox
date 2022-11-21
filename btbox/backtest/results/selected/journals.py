@@ -1,9 +1,10 @@
 from typing import Any, Callable, Iterable, ParamSpec, TypeVar
-from pandas import DataFrame
+from pandas import DataFrame, Series
+from plotly.graph_objects import Scatter
 from btbox.strategy.journal import Journal
 from functools import wraps
 import plotly.express as px
-from plotly.tools import make_subplots
+from plotly.subplots import make_subplots
 
 
 P = ParamSpec('P')
@@ -13,8 +14,10 @@ R = TypeVar('R')
 class FilteredMarks:
     def __init__(self,
                  name: str,
+                 nav: Series,
                  filtered: DataFrame) -> None:
         self._name = name
+        self._nav = nav
         self._filtered = filtered
 
     @staticmethod
@@ -42,14 +45,25 @@ class FilteredMarks:
         fig = px.scatter(self._filtered, **kwargs_scatter)
         fig.show()
 
+    def plot_line_under_nav(self, **kwargs_make_subplots: Any) -> None:
+        fig = make_subplots(rows=2, shared_xaxes=True)
+        fig.add_trace(Scatter(x=self._nav.index,
+                              y=self._nav), row=1, col=1)
+        for _, sr in self._filtered.items():
+            fig.add_trace(Scatter(x=sr.index,
+                                  y=sr), row=2, col=1)
+        fig.show()
+
 
 class Journals:
     def __init__(self,
                  name: str,
+                 nav: Series,
                  journal: Journal) -> None:
         self._name = name
+        self._nav = nav
         self._marks = journal.marks
 
     def __getitem__(self, names: Iterable[str]) -> FilteredMarks:
         df = self._marks.loc[:, names]
-        return FilteredMarks(self._name, df)
+        return FilteredMarks(self._name, self._nav, df)

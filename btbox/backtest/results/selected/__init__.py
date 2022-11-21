@@ -14,7 +14,8 @@ class Selected:
         self._strategy = strategy
         self._report = report
         self._nav = Nav(self._name, self._report.nav)
-        self._journals = Journals(self._name, self._strategy.journal)
+        self._journals = Journals(
+            self._name, self._report.nav, self._strategy.journal)
 
     @property
     def nav(self) -> Nav:
