@@ -67,7 +67,7 @@ def test4():
         market = Market(datasource, clock)
         broker = Broker(market, clock)
         strategy = St(broker, clock)
-        job = Job(strategy, clock)
+        job = Job(strategy, datasource, clock)
         job.run()
     for St in [StBasic, StBenchmarak, StDecorator]:
         run_job(St)

@@ -32,6 +32,10 @@ class DataSource:
     def timeline(self) -> DatetimeIndex:
         return self._timeline
 
+    def get_dataframe(self,
+                      symbol: str) -> DataFrame:
+        return self._dataframes[symbol]
+
     @cache
     def get_ohlcv_at(self,
                      symbol: str,

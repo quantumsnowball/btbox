@@ -17,5 +17,5 @@ def create_job(CustomStrategy: type[Strategy],
     market = Market(datasource, clock)
     broker = Broker(market, clock)
     strategy = CustomStrategy(broker, clock)
-    job = Job(strategy, clock)
+    job = Job(strategy, datasource, clock)
     return job

@@ -1,5 +1,6 @@
 from typing import Any
 from btbox.broker.report import Report
+from btbox.datasource import DataSource
 from btbox.job.result.metrics import Metrics
 from btbox.strategy import Strategy
 import plotly.express as px
@@ -8,10 +9,12 @@ import plotly.express as px
 class Result:
     def __init__(self,
                  strategy: Strategy,
-                 report: Report):
+                 report: Report,
+                 datasource: DataSource):
         self._strategy = strategy
         self._name = strategy.name
         self._report = report
+        self._datasource = datasource
         self._metrics = Metrics(self._strategy, self._report)
 
     @property
@@ -21,6 +24,10 @@ class Result:
     @property
     def strategy(self) -> Strategy:
         return self._strategy
+
+    @property
+    def datasource(self) -> DataSource:
+        return self._datasource
 
     @property
     def report(self) -> Report:
