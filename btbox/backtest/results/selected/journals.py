@@ -45,13 +45,27 @@ class FilteredMarks:
         fig = px.scatter(self._filtered, **kwargs_scatter)
         fig.show()
 
-    def plot_line_under_nav(self, **kwargs_make_subplots: Any) -> None:
+    def plot_line_under_nav(self) -> None:
         fig = make_subplots(rows=2, shared_xaxes=True)
         fig.add_trace(Scatter(x=self._nav.index,
                               y=self._nav), row=1, col=1)
         for _, sr in self._filtered.items():
             fig.add_trace(Scatter(x=sr.index,
                                   y=sr), row=2, col=1)
+        fig.show()
+
+    def plot_scatter_under_nav(self) -> None:
+        fig = make_subplots(rows=2, shared_xaxes=True)
+        fig.add_trace(Scatter(x=self._nav.index,
+                              y=self._nav), row=1, col=1)
+        for _, sr in self._filtered.items():
+            fig.add_trace(
+                Scatter(
+                    mode='markers',
+                    x=sr.index,
+                    y=sr,
+                    marker=dict(size=10)),
+                row=2, col=1)
         fig.show()
 
 
