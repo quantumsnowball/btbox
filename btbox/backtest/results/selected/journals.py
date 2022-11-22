@@ -94,23 +94,9 @@ class FilteredMarks:
         fig.show()
 
     @set_default_title()
-    def plot_scatter_under_nav(self, **kwargs_update_layout: Any) -> None:
-        fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name='NAV',
-                x=self._nav.index,
-                y=self._nav), row=1, col=1)
-        for name, sr in self._filtered.items():
-            fig.add_trace(
-                Scatter(
-                    mode='markers',
-                    name=name,
-                    x=sr.index,
-                    y=sr,
-                    marker=dict(size=10)),
-                row=2, col=1)
+    def plot_scatter_under_nav(self, **kwargs: Any) -> None:
+        fig = make_top_and_bottom_fig(
+            self._nav, self._filtered, name_top='NAV', scatter=True, ** kwargs)
         fig.show()
 
 

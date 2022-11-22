@@ -194,9 +194,9 @@ def test_plot_scatter_under_nav(mocker):
         [S1, ], dfs, start='2020-01-01', window=30).run()
     result = results['Nav-Scatter']
     fn_make_subplots = mocker.patch(
-        'btbox.backtest.results.selected.journals.make_subplots')
+        'btbox.backtest.results.selected.utils.make_subplots')
     fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.journals.Scatter')
+        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['Every 2 Days', 'Every 5 Days'].plot_scatter_under_nav()
     fn_make_subplots.assert_called_once()
     fn_Scatter.assert_called()
