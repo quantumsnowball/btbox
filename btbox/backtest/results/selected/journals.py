@@ -57,8 +57,9 @@ class FilteredMarks:
         fig.show()
 
     @set_default_title()
-    def plot_scatter(self, **kwargs_scatter: Any) -> None:
-        fig = px.scatter(self._filtered, **kwargs_scatter)
+    def plot_scatter(self, **kwargs: Any) -> None:
+        fig = make_single_simple_fig(
+            self._filtered, scatter=True, log_y=False, **kwargs)
         fig.show()
 
     @set_default_title()
