@@ -168,9 +168,9 @@ def test_plot_line_under_price(mocker):
         [S1, ], dfs, start='2020-01-01', window=30).run()
     result = results['Price-Line']
     fn_make_subplots = mocker.patch(
-        'btbox.backtest.results.selected.journals.make_subplots')
+        'btbox.backtest.results.selected.utils.make_subplots')
     fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.journals.Scatter')
+        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line_under_price('SPY')
     fn_make_subplots.assert_called_once()
     fn_Scatter.assert_called()

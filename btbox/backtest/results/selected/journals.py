@@ -1,11 +1,12 @@
 from typing import Any, Callable, Iterable, ParamSpec, Self, TypeVar
 from pandas import DataFrame
-from plotly.graph_objects import Figure, Scatter
-from btbox.backtest.results.selected.utils import make_single_overlay_fig, make_single_simple_fig, make_top_and_bottom_fig
+from btbox.backtest.results.selected.utils import (
+    make_single_overlay_fig,
+    make_single_simple_fig,
+    make_top_and_bottom_fig)
 from btbox.job.result import Result
 from btbox.strategy.journal import Journal
 from functools import wraps
-import plotly.express as px
 from plotly.subplots import make_subplots
 
 
@@ -86,21 +87,10 @@ class FilteredMarks:
     @set_default_title()
     def plot_line_under_price(self,
                               symbol: str,
-                              **kwargs_update_layout: Any) -> None:
+                              **kwargs: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
-        fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name=symbol,
-                x=price.index,
-                y=price), row=1, col=1)
-        for name, sr in self._filtered.items():
-            fig.add_trace(
-                Scatter(
-                    name=name,
-                    x=sr.index,
-                    y=sr), row=2, col=1)
+        fig = make_top_and_bottom_fig(
+            price, self._filtered, name_top=symbol, ** kwargs)
         fig.show()
 
     @set_default_title()
