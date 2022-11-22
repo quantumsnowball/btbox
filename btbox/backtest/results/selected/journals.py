@@ -1,4 +1,4 @@
-from typing import Any, Callable, Iterable, ParamSpec, TypeVar
+from typing import Any, Callable, Iterable, ParamSpec, Self, TypeVar
 from pandas import DataFrame
 from plotly.graph_objects import Figure, Scatter
 from btbox.job.result import Result
@@ -21,6 +21,16 @@ class FilteredMarks:
         self._result = result
         self._nav = self._result.report.nav
         self._filtered = filtered
+
+    @property
+    def bfill(self) -> Self:
+        self._filtered = self._filtered.fillna(axis=0, method='bfill')
+        return self
+
+    @property
+    def ffill(self) -> Self:
+        self._filtered = self._filtered.fillna(axis=0, method='ffill')
+        return self
 
     @staticmethod
     def set_default_title(name: str = 'title') \
