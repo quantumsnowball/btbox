@@ -18,10 +18,11 @@ def test_bfill_ffill():
 
     results = create_backtest(
         [S1, ], dfs, start='2020-01-01', window=30).run()
-    df_pre = results['Line'].journals['line-8888', 'line-9999'].values
-    df_bfill = results['Line'].journals['line-8888', 'line-9999'].bfill.values
-    df_ffill = results['Line'].journals['line-8888', 'line-9999'].ffill.values
+    df_pre = results['Line'].journals['line-8888'].values
+    df_bfill = results['Line'].journals['line-8888'].bfill.values
     assert df_bfill.equals(df_pre.bfill())
+    df_pre = results['Line'].journals['line-9999'].values
+    df_ffill = results['Line'].journals['line-9999'].ffill.values
     assert df_ffill.equals(df_pre.ffill())
 
 
@@ -63,6 +64,29 @@ def test_plot_line_under_nav(mocker):
     fn_Scatter = mocker.patch(
         'btbox.backtest.results.selected.journals.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line_under_nav()
+    fn_make_subplots.assert_called_once()
+    fn_Scatter.assert_called()
+
+
+def test_plot_line_under_price(mocker):
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+
+    class S1(Strategy):
+        name = 'Price-Line'
+
+        @interval(1)
+        def step(self, b: Broker):
+            self.journal.mark(8888, 'line-8888')
+            self.journal.mark(9999, 'line-9999')
+
+    results = create_backtest(
+        [S1, ], dfs, start='2020-01-01', window=30).run()
+    result = results['Price-Line']
+    fn_make_subplots = mocker.patch(
+        'btbox.backtest.results.selected.journals.make_subplots')
+    fn_Scatter = mocker.patch(
+        'btbox.backtest.results.selected.journals.Scatter')
+    result.journals['line-8888', 'line-9999'].plot_line_under_price('SPY')
     fn_make_subplots.assert_called_once()
     fn_Scatter.assert_called()
 

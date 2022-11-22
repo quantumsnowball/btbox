@@ -152,5 +152,5 @@ class Journals:
         self._marks = journal.marks
 
     def __getitem__(self, names: Iterable[str]) -> FilteredMarks:
-        df = self._marks.loc[:, names]
+        df = DataFrame(self._marks.loc[:, names])
         return FilteredMarks(self._name, self._result, df)
