@@ -71,24 +71,10 @@ class FilteredMarks:
     @set_default_title()
     def plot_scatter_on_price(self,
                               symbol: str,
-                              **kwargs_update_layout: Any) -> None:
+                              **kwargs: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
-        fig = Figure()
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name=symbol,
-                x=price.index,
-                y=price))
-        for name, sr in self._filtered.items():
-            points = price[~sr.isnull()]
-            fig.add_trace(
-                Scatter(
-                    mode='markers',
-                    name=name,
-                    x=points.index,
-                    y=points,
-                    marker=dict(size=10)))
+        fig = make_single_overlay_fig(
+            price, self._filtered, name_main=symbol, scatter=True, **kwargs)
         fig.show()
 
     @set_default_title()

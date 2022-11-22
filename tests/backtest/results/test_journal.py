@@ -103,6 +103,33 @@ def test_plot_scatter_on_nav(mocker):
     fn_Scatter.assert_called()
 
 
+def test_plot_scatter_on_price(mocker):
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+
+    class S1(Strategy):
+        name = 'Nav-Scatter'
+
+        def step(self, i: int, b: Broker):
+            if i % 2 == 0 and i > 0:
+                self.journal.mark(2, 'Every 2 Days')
+            if i % 4 == 0 and i > 0:
+                self.journal.mark(4, 'Every 4 Days')
+            if i % 5 == 0 and i > 0:
+                self.journal.mark(4, 'Every 5 Days')
+
+    results = create_backtest(
+        [S1, ], dfs, start='2020-01-01', window=30).run()
+    result = results['Nav-Scatter']
+    fn_Figure = mocker.patch(
+        'btbox.backtest.results.selected.utils.Figure')
+    fn_Scatter = mocker.patch(
+        'btbox.backtest.results.selected.utils.Scatter')
+    result.journals['Every 2 Days',
+                    'Every 5 Days'].plot_scatter_on_price('SPY')
+    fn_Figure.assert_called_once()
+    fn_Scatter.assert_called()
+
+
 def test_plot_line_under_nav(mocker):
     dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
@@ -146,33 +173,6 @@ def test_plot_line_under_price(mocker):
         'btbox.backtest.results.selected.journals.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line_under_price('SPY')
     fn_make_subplots.assert_called_once()
-    fn_Scatter.assert_called()
-
-
-def test_plot_scatter_on_price(mocker):
-    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
-
-    class S1(Strategy):
-        name = 'Nav-Scatter'
-
-        def step(self, i: int, b: Broker):
-            if i % 2 == 0 and i > 0:
-                self.journal.mark(2, 'Every 2 Days')
-            if i % 4 == 0 and i > 0:
-                self.journal.mark(4, 'Every 4 Days')
-            if i % 5 == 0 and i > 0:
-                self.journal.mark(4, 'Every 5 Days')
-
-    results = create_backtest(
-        [S1, ], dfs, start='2020-01-01', window=30).run()
-    result = results['Nav-Scatter']
-    fn_Figure = mocker.patch(
-        'btbox.backtest.results.selected.journals.Figure')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.journals.Scatter')
-    result.journals['Every 2 Days',
-                    'Every 5 Days'].plot_scatter_on_price('SPY')
-    fn_Figure.assert_called_once()
     fn_Scatter.assert_called()
 
 
