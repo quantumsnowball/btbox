@@ -34,41 +34,38 @@ class FilteredMarks:
         return self
 
     @staticmethod
-    def set_default_title(name: str = 'title') \
-            -> Callable[[Callable[P, R]], Callable[P, R]]:
-        def wrapper_fn_plot(fn_plot: Callable[P, R]) -> Callable[P, R]:
-            @wraps(fn_plot)
-            def wrapped_fn_plot(*args: P.args,
-                                **kwargs: P.kwargs) -> R:
-                if isinstance(args[0], FilteredMarks):
-                    if name not in kwargs:
-                        kwargs[name] = args[0]._name
-                return fn_plot(*args, **kwargs)
-            return wrapped_fn_plot
-        return wrapper_fn_plot
+    def default_title(fn_plot: Callable[P, R]) -> Callable[P, R]:
+        @wraps(fn_plot)
+        def wrapped_fn_plot(*args: P.args,
+                            **kwargs: P.kwargs) -> R:
+            if isinstance(args[0], FilteredMarks):
+                if 'title' not in kwargs:
+                    kwargs['title'] = args[0]._name
+            return fn_plot(*args, **kwargs)
+        return wrapped_fn_plot
 
     @property
     def values(self) -> DataFrame:
         return self._filtered
 
-    @set_default_title()
+    @default_title
     def plot_line(self, **kwargs: Any) -> None:
         fig = make_single_simple_fig(self._filtered, **kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_scatter(self, **kwargs: Any) -> None:
         fig = make_single_simple_fig(
             self._filtered, scatter=True, log_y=False, **kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_scatter_on_nav(self, **kwargs: Any) -> None:
         fig = make_single_overlay_fig(
             self._nav, self._filtered, name_main='NAV', scatter=True, **kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_scatter_on_price(self,
                               symbol: str,
                               **kwargs: Any) -> None:
@@ -77,13 +74,13 @@ class FilteredMarks:
             price, self._filtered, name_main=symbol, scatter=True, **kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_line_under_nav(self, **kwargs: Any) -> None:
         fig = make_top_and_bottom_fig(
             self._nav, self._filtered, name_top='NAV', ** kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_line_under_price(self,
                               symbol: str,
                               **kwargs: Any) -> None:
@@ -92,7 +89,7 @@ class FilteredMarks:
             price, self._filtered, name_top=symbol, ** kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_scatter_under_nav(self, **kwargs: Any) -> None:
         fig = make_top_and_bottom_fig(
             self._nav, self._filtered, name_top='NAV', scatter=True, ** kwargs)
