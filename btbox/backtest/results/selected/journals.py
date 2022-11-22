@@ -1,6 +1,7 @@
 from typing import Any, Callable, Iterable, ParamSpec, Self, TypeVar
 from pandas import DataFrame
 from plotly.graph_objects import Figure, Scatter
+from btbox.backtest.results.selected.utils import make_single_simple_fig
 from btbox.job.result import Result
 from btbox.strategy.journal import Journal
 from functools import wraps
@@ -51,8 +52,8 @@ class FilteredMarks:
         return self._filtered
 
     @set_default_title()
-    def plot_line(self, **kwargs_line: Any) -> None:
-        fig = px.line(self._filtered, **kwargs_line)
+    def plot_line(self, **kwargs: Any) -> None:
+        fig = make_single_simple_fig(self._filtered, **kwargs)
         fig.show()
 
     @set_default_title()

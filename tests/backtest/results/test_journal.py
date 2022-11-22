@@ -40,9 +40,13 @@ def test_plot_line(mocker):
     results = create_backtest(
         [S1, ], dfs, start='2020-01-01', window=30).run()
     result = results['Line']
-    fn_line = mocker.patch('btbox.backtest.results.selected.journals.px.line')
+    fn_Figure = mocker.patch(
+        'btbox.backtest.results.selected.utils.Figure')
+    fn_Scatter = mocker.patch(
+        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line()
-    fn_line.assert_called_once()
+    fn_Figure.assert_called_once()
+    fn_Scatter.assert_called()
 
 
 def test_plot_line_under_nav(mocker):
