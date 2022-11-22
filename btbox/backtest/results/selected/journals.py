@@ -1,11 +1,12 @@
 from typing import Any, Callable, Iterable, ParamSpec, Self, TypeVar
 from pandas import DataFrame
-from plotly.graph_objects import Figure, Scatter
+from btbox.backtest.results.selected.utils import (
+    make_single_overlay_fig,
+    make_single_simple_fig,
+    make_top_and_bottom_fig)
 from btbox.job.result import Result
 from btbox.strategy.journal import Journal
 from functools import wraps
-import plotly.express as px
-from plotly.subplots import make_subplots
 
 
 P = ParamSpec('P')
@@ -33,131 +34,75 @@ class FilteredMarks:
         return self
 
     @staticmethod
-    def set_default_title(name: str = 'title') \
-            -> Callable[[Callable[P, R]], Callable[P, R]]:
-        def wrapper_fn_plot(fn_plot: Callable[P, R]) -> Callable[P, R]:
-            @wraps(fn_plot)
-            def wrapped_fn_plot(*args: P.args,
-                                **kwargs: P.kwargs) -> R:
-                if isinstance(args[0], FilteredMarks):
-                    if name not in kwargs:
-                        kwargs[name] = args[0]._name
-                return fn_plot(*args, **kwargs)
-            return wrapped_fn_plot
-        return wrapper_fn_plot
+    def default_title(fn_plot: Callable[P, R]) -> Callable[P, R]:
+        @wraps(fn_plot)
+        def wrapped_fn_plot(*args: P.args,
+                            **kwargs: P.kwargs) -> R:
+            if isinstance(args[0], FilteredMarks):
+                if 'title' not in kwargs:
+                    kwargs['title'] = args[0]._name
+            return fn_plot(*args, **kwargs)
+        return wrapped_fn_plot
 
     @property
     def values(self) -> DataFrame:
         return self._filtered
 
-    @set_default_title()
-    def plot_line(self, **kwargs_line: Any) -> None:
-        fig = px.line(self._filtered, **kwargs_line)
+    @default_title
+    def plot_line(self, **kwargs: Any) -> None:
+        fig = make_single_simple_fig(self._filtered, **kwargs)
         fig.show()
 
-    @set_default_title()
-    def plot_scatter(self, **kwargs_scatter: Any) -> None:
-        fig = px.scatter(self._filtered, **kwargs_scatter)
+    @default_title
+    def plot_scatter(self, **kwargs: Any) -> None:
+        fig = make_single_simple_fig(
+            self._filtered, scatter=True, log_y=False, **kwargs)
         fig.show()
 
-    @set_default_title()
-    def plot_scatter_on_nav(self, **kwargs_update_layout: Any) -> None:
-        fig = Figure()
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name='NAV',
-                x=self._nav.index,
-                y=self._nav))
-        for name, sr in self._filtered.items():
-            points = self._nav[~sr.isnull()]
-            fig.add_trace(
-                Scatter(
-                    mode='markers',
-                    name=name,
-                    x=points.index,
-                    y=points,
-                    marker=dict(size=10)))
+    @default_title
+    def plot_line_on_price(self, symbol: str, **kwargs: Any) -> None:
+        price = self._result.datasource.get_dataframe(symbol).Close
+        fig = make_single_overlay_fig(
+            price, self._filtered,
+            name_main=symbol, **kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
+    def plot_scatter_on_nav(self, **kwargs: Any) -> None:
+        fig = make_single_overlay_fig(
+            self._nav, self._filtered,
+            name_main='NAV', projection=True, scatter=True, **kwargs)
+        fig.show()
+
+    @default_title
     def plot_scatter_on_price(self,
                               symbol: str,
-                              **kwargs_update_layout: Any) -> None:
+                              **kwargs: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
-        fig = Figure()
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name=symbol,
-                x=price.index,
-                y=price))
-        for name, sr in self._filtered.items():
-            points = price[~sr.isnull()]
-            fig.add_trace(
-                Scatter(
-                    mode='markers',
-                    name=name,
-                    x=points.index,
-                    y=points,
-                    marker=dict(size=10)))
+        fig = make_single_overlay_fig(
+            price, self._filtered,
+            name_main=symbol, projection=True, scatter=True, **kwargs)
         fig.show()
 
-    @set_default_title()
-    def plot_line_under_nav(self, **kwargs_update_layout: Any) -> None:
-        fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name='NAV',
-                x=self._nav.index,
-                y=self._nav), row=1, col=1)
-        for name, sr in self._filtered.items():
-            fig.add_trace(
-                Scatter(
-                    name=name,
-                    x=sr.index,
-                    y=sr), row=2, col=1)
+    @default_title
+    def plot_line_under_nav(self, **kwargs: Any) -> None:
+        fig = make_top_and_bottom_fig(
+            self._nav, self._filtered, name_top='NAV', **kwargs)
         fig.show()
 
-    @set_default_title()
+    @default_title
     def plot_line_under_price(self,
                               symbol: str,
-                              **kwargs_update_layout: Any) -> None:
+                              **kwargs: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
-        fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name=symbol,
-                x=price.index,
-                y=price), row=1, col=1)
-        for name, sr in self._filtered.items():
-            fig.add_trace(
-                Scatter(
-                    name=name,
-                    x=sr.index,
-                    y=sr), row=2, col=1)
+        fig = make_top_and_bottom_fig(
+            price, self._filtered, name_top=symbol, **kwargs)
         fig.show()
 
-    @set_default_title()
-    def plot_scatter_under_nav(self, **kwargs_update_layout: Any) -> None:
-        fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name='NAV',
-                x=self._nav.index,
-                y=self._nav), row=1, col=1)
-        for name, sr in self._filtered.items():
-            fig.add_trace(
-                Scatter(
-                    mode='markers',
-                    name=name,
-                    x=sr.index,
-                    y=sr,
-                    marker=dict(size=10)),
-                row=2, col=1)
+    @default_title
+    def plot_scatter_under_nav(self, **kwargs: Any) -> None:
+        fig = make_top_and_bottom_fig(
+            self._nav, self._filtered, name_top='NAV', scatter=True, **kwargs)
         fig.show()
 
 
