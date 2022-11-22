@@ -37,99 +37,83 @@ def test_bfill_ffill():
     assert df_ffill.equals(df_pre.ffill())
 
 
-def test_plot_line(mocker):
+def mock_Figure_Scatter(fn_test):
+    def wrapper(mocker):
+        fn_Figure = mocker.patch(
+            'btbox.backtest.results.selected.utils.Figure')
+        fn_Scatter = mocker.patch(
+            'btbox.backtest.results.selected.utils.Scatter')
+        fn_test()
+        fn_Figure.assert_called_once()
+        fn_Scatter.assert_called()
+    return wrapper
+
+
+def mock_make_subplots_Scatter(fn_test):
+    def wrapper(mocker):
+        fn_make_subplots = mocker.patch(
+            'btbox.backtest.results.selected.utils.make_subplots')
+        fn_Scatter = mocker.patch(
+            'btbox.backtest.results.selected.utils.Scatter')
+        fn_test()
+        fn_make_subplots.assert_called_once()
+        fn_Scatter.assert_called()
+    return wrapper
+
+
+@mock_Figure_Scatter
+def test_plot_line():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_Figure = mocker.patch(
-        'btbox.backtest.results.selected.utils.Figure')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line()
-    fn_Figure.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_scatter(mocker):
+@mock_Figure_Scatter
+def test_plot_scatter():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
     assert result.journals['every-2d', 'every-5d'].values.shape[1] == 2
     assert result.journals['every-2d', 'every-4d'].values.shape[1] == 2
-    fn_Figure = mocker.patch(
-        'btbox.backtest.results.selected.utils.Figure')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['every-2d', 'every-5d'].plot_scatter()
-    fn_Figure.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_line_on_price(mocker):
+@mock_Figure_Scatter
+def test_plot_line_on_price():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_Figure = mocker.patch(
-        'btbox.backtest.results.selected.utils.Figure')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line_on_price('SPY')
-    fn_Figure.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_scatter_on_nav(mocker):
+@mock_Figure_Scatter
+def test_plot_scatter_on_nav():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_Figure = mocker.patch(
-        'btbox.backtest.results.selected.utils.Figure')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['every-2d', 'every-5d'].plot_scatter_on_nav()
-    fn_Figure.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_scatter_on_price(mocker):
+@mock_Figure_Scatter
+def test_plot_scatter_on_price():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_Figure = mocker.patch(
-        'btbox.backtest.results.selected.utils.Figure')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['every-2d', 'every-5d'].plot_scatter_on_price('SPY')
-    fn_Figure.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_line_under_nav(mocker):
+@mock_make_subplots_Scatter
+def test_plot_line_under_nav():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_make_subplots = mocker.patch(
-        'btbox.backtest.results.selected.utils.make_subplots')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line_under_nav()
-    fn_make_subplots.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_line_under_price(mocker):
+@mock_make_subplots_Scatter
+def test_plot_line_under_price():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_make_subplots = mocker.patch(
-        'btbox.backtest.results.selected.utils.make_subplots')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['line-8888', 'line-9999'].plot_line_under_price('SPY')
-    fn_make_subplots.assert_called_once()
-    fn_Scatter.assert_called()
 
 
-def test_plot_scatter_under_nav(mocker):
+@mock_make_subplots_Scatter
+def test_plot_scatter_under_nav():
     result = create_backtest([ST, ], dfs,
                              start='2020-01-01', window=30).run()['ST']
-    fn_make_subplots = mocker.patch(
-        'btbox.backtest.results.selected.utils.make_subplots')
-    fn_Scatter = mocker.patch(
-        'btbox.backtest.results.selected.utils.Scatter')
     result.journals['every-2d', 'every-5d'].plot_scatter_under_nav()
-    fn_make_subplots.assert_called_once()
-    fn_Scatter.assert_called()
