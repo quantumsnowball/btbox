@@ -5,6 +5,26 @@ from btbox.backtest.utils import create_backtest
 from btbox.strategy.decorator import interval
 
 
+def test_bfill_ffill():
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+
+    class S1(Strategy):
+        name = 'Line'
+
+        @interval(1000)
+        def step(self, b: Broker):
+            self.journal.mark(8888, 'line-8888')
+            self.journal.mark(9999, 'line-9999')
+
+    results = create_backtest(
+        [S1, ], dfs, start='2020-01-01', window=30).run()
+    df_pre = results['Line'].journals['line-8888', 'line-9999'].values
+    df_bfill = results['Line'].journals['line-8888', 'line-9999'].bfill.values
+    df_ffill = results['Line'].journals['line-8888', 'line-9999'].ffill.values
+    assert df_bfill.equals(df_pre.bfill())
+    assert df_ffill.equals(df_pre.ffill())
+
+
 def test_plot_line(mocker):
     dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
