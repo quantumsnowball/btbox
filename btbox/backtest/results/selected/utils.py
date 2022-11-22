@@ -55,11 +55,14 @@ def make_top_and_bottom_fig(data_top: Series,
                             title: str,
                             name_top: str,
                             scatter: bool = False,
-                            log_y: bool = True) -> Figure:
+                            log_y_top: bool = True,
+                            log_y_bottom: bool = False) -> Figure:
     fig = make_subplots(rows=2, shared_xaxes=True)
     fig.update_layout(title=title)
-    if log_y:
-        fig.update_yaxes(type='log')
+    if log_y_top:
+        fig.update_yaxes(type='log', row=1)
+    if log_y_bottom:
+        fig.update_yaxes(type='log', row=2)
     fig.add_trace(
         Scatter(
             name=name_top,

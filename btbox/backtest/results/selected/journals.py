@@ -7,7 +7,6 @@ from btbox.backtest.results.selected.utils import (
 from btbox.job.result import Result
 from btbox.strategy.journal import Journal
 from functools import wraps
-from plotly.subplots import make_subplots
 
 
 P = ParamSpec('P')
