@@ -60,9 +60,18 @@ class FilteredMarks:
         fig.show()
 
     @default_title
+    def plot_line_on_price(self, symbol: str, **kwargs: Any) -> None:
+        price = self._result.datasource.get_dataframe(symbol).Close
+        fig = make_single_overlay_fig(
+            price, self._filtered,
+            name_main=symbol, **kwargs)
+        fig.show()
+
+    @default_title
     def plot_scatter_on_nav(self, **kwargs: Any) -> None:
         fig = make_single_overlay_fig(
-            self._nav, self._filtered, name_main='NAV', scatter=True, **kwargs)
+            self._nav, self._filtered,
+            name_main='NAV', projection=True, scatter=True, **kwargs)
         fig.show()
 
     @default_title
@@ -71,13 +80,14 @@ class FilteredMarks:
                               **kwargs: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
         fig = make_single_overlay_fig(
-            price, self._filtered, name_main=symbol, scatter=True, **kwargs)
+            price, self._filtered,
+            name_main=symbol, projection=True, scatter=True, **kwargs)
         fig.show()
 
     @default_title
     def plot_line_under_nav(self, **kwargs: Any) -> None:
         fig = make_top_and_bottom_fig(
-            self._nav, self._filtered, name_top='NAV', ** kwargs)
+            self._nav, self._filtered, name_top='NAV', **kwargs)
         fig.show()
 
     @default_title
@@ -86,13 +96,13 @@ class FilteredMarks:
                               **kwargs: Any) -> None:
         price = self._result.datasource.get_dataframe(symbol).Close
         fig = make_top_and_bottom_fig(
-            price, self._filtered, name_top=symbol, ** kwargs)
+            price, self._filtered, name_top=symbol, **kwargs)
         fig.show()
 
     @default_title
     def plot_scatter_under_nav(self, **kwargs: Any) -> None:
         fig = make_top_and_bottom_fig(
-            self._nav, self._filtered, name_top='NAV', scatter=True, ** kwargs)
+            self._nav, self._filtered, name_top='NAV', scatter=True, **kwargs)
         fig.show()
 
 

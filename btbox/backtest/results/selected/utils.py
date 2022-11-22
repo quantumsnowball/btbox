@@ -27,6 +27,7 @@ def make_single_overlay_fig(data_main: Series,
                             *,
                             title: str,
                             name_main: str,
+                            projection: bool = False,
                             scatter: bool = False,
                             log_y: bool = True) -> Figure:
     fig = Figure()
@@ -39,13 +40,14 @@ def make_single_overlay_fig(data_main: Series,
             x=data_main.index,
             y=data_main))
     for name, sr in data_overlay.items():
-        points = data_main[~sr.isnull()]
+        if projection:
+            sr = data_main[~sr.isnull()]
         fig.add_trace(
             Scatter(
                 mode='markers' if scatter else 'lines',
                 name=name,
-                x=points.index,
-                y=points))
+                x=sr.index,
+                y=sr))
     return fig
 
 

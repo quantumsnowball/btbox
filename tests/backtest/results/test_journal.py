@@ -77,6 +77,29 @@ def test_plot_scatter(mocker):
     fn_Scatter.assert_called()
 
 
+def test_plot_line_on_price(mocker):
+    dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
+
+    class S1(Strategy):
+        name = 'Line'
+
+        @interval(1)
+        def step(self, b: Broker):
+            self.journal.mark(8888, 'line-8888')
+            self.journal.mark(9999, 'line-9999')
+
+    results = create_backtest(
+        [S1, ], dfs, start='2020-01-01', window=30).run()
+    result = results['Line']
+    fn_Figure = mocker.patch(
+        'btbox.backtest.results.selected.utils.Figure')
+    fn_Scatter = mocker.patch(
+        'btbox.backtest.results.selected.utils.Scatter')
+    result.journals['line-8888', 'line-9999'].plot_line_on_price('SPY')
+    fn_Figure.assert_called_once()
+    fn_Scatter.assert_called()
+
+
 def test_plot_scatter_on_nav(mocker):
     dfs = {'SPY': import_yahoo_csv('tests/_data_/SPY_bar1day.csv')}
 
