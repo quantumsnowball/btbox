@@ -1,7 +1,7 @@
 from typing import Any, Callable, Iterable, ParamSpec, Self, TypeVar
 from pandas import DataFrame
 from plotly.graph_objects import Figure, Scatter
-from btbox.backtest.results.selected.utils import make_single_overlay_fig, make_single_simple_fig
+from btbox.backtest.results.selected.utils import make_single_overlay_fig, make_single_simple_fig, make_top_and_bottom_fig
 from btbox.job.result import Result
 from btbox.strategy.journal import Journal
 from functools import wraps
@@ -78,20 +78,9 @@ class FilteredMarks:
         fig.show()
 
     @set_default_title()
-    def plot_line_under_nav(self, **kwargs_update_layout: Any) -> None:
-        fig = make_subplots(rows=2, shared_xaxes=True)
-        fig.update_layout(**kwargs_update_layout)
-        fig.add_trace(
-            Scatter(
-                name='NAV',
-                x=self._nav.index,
-                y=self._nav), row=1, col=1)
-        for name, sr in self._filtered.items():
-            fig.add_trace(
-                Scatter(
-                    name=name,
-                    x=sr.index,
-                    y=sr), row=2, col=1)
+    def plot_line_under_nav(self, **kwargs: Any) -> None:
+        fig = make_top_and_bottom_fig(
+            self._nav, self._filtered, name_top='NAV', ** kwargs)
         fig.show()
 
     @set_default_title()
