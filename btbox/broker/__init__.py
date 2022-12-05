@@ -1,3 +1,4 @@
+from pandas import DatetimeIndex
 from btbox.share import Clock
 from btbox.broker.account import Account
 from btbox.broker.audit import Audit
@@ -25,7 +26,7 @@ class Broker:
         self._clock = clock
 
     @property
-    def timeline(self) -> list[datetime]:
+    def timeline(self) -> DatetimeIndex:
         return self._timeline
 
     @property

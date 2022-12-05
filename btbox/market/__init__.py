@@ -1,5 +1,4 @@
-from pandas import DataFrame, Series
-from datetime import datetime
+from pandas import DataFrame, DatetimeIndex, Series
 from btbox.share import Clock
 from btbox.datasource import DataSource
 
@@ -13,7 +12,7 @@ class Market:
         self._clock = clock
 
     @property
-    def timeline(self) -> list[datetime]:
+    def timeline(self) -> DatetimeIndex:
         return self._timeline
 
     def get_ohlcv(self,

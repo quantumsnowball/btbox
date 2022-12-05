@@ -1,7 +1,8 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame, DatetimeIndex, Series
 from datetime import datetime
 from functools import cache
 from btbox.datasource.utils import (
+    extract_timeline,
     parse_start_end_window,
     trim_ohlcv_length,
 )
@@ -23,33 +24,45 @@ class DataSource:
         self._dataframes = {
             k: trim_ohlcv_length(df, trim_from, trim_to)
             for k, df in dataframes.items()}
-        self._timeline = next(iter(self._dataframes.values())
-                              ).loc[self._start:self._end].index.to_list()
+        self._timeline = extract_timeline(
+            self._start, self._end,
+            next(iter(self._dataframes.values())))
 
     @property
-    def timeline(self) -> list[datetime]:
+    def timeline(self) -> DatetimeIndex:
         return self._timeline
+
+    def get_dataframe(self,
+                      symbol: str) -> DataFrame:
+        dataframe = self._dataframes[symbol].reindex(self._timeline)
+        return dataframe
 
     @cache
     def get_ohlcv_at(self,
                      symbol: str,
                      at: datetime) -> DataFrame:
-        return self._dataframes[symbol].loc[at]
+        ohlcv: DataFrame = self._dataframes[symbol].loc[at]
+        return ohlcv
 
     @cache
     def get_close_at(self,
                      symbol: str,
                      at: datetime) -> float:
-        return self._dataframes[symbol].at[at, 'Close']
+        close: float = self._dataframes[symbol].at[at, 'Close']
+        return close
 
     @cache
     def get_ohlcv_window_at(self,
                             symbol: str,
                             on: datetime) -> DataFrame:
-        return self._dataframes[symbol].loc[:on].iloc[-self._window:]
+        ohlcv_window: DataFrame = \
+            self._dataframes[symbol].loc[:on].iloc[-self._window:]
+        return ohlcv_window
 
     @cache
     def get_close_window_at(self,
                             symbol: str,
                             on: datetime) -> Series:
-        return self._dataframes[symbol].Close.loc[:on].iloc[-self._window:]
+        close_window: Series = \
+            self._dataframes[symbol].Close.loc[:on].iloc[-self._window:]
+        return close_window

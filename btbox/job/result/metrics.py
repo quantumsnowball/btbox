@@ -18,7 +18,7 @@ def detect_annualize_factor(ts: Series | DataFrame,
         year_diff = time_diff.total_seconds() / 60 / 60 / 24 / 365.25
         n_timeline = len(timeline) - 1
         annualize_factor = n_timeline / year_diff
-        return annualize_factor
+        return float(annualize_factor)
 
     N = len(ts)
     len_trunk = min(N, sample_size)
@@ -34,13 +34,13 @@ def detect_annualize_factor(ts: Series | DataFrame,
 
 def total_return(ts: Series) -> float:
     ans = ts.iloc[-1] / ts.iloc[0] - 1
-    return ans
+    return float(ans)
 
 
 def cagr(ts: Series) -> float:
     ydiff = (ts.index[-1] - ts.index[0]) / pd.Timedelta(days=365)
     ans = (ts.iloc[-1] / ts.iloc[0]) ** (1 / ydiff) - 1
-    return ans
+    return float(ans)
 
 
 def mu_sigma(ts: Series,

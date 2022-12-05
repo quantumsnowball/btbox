@@ -1,6 +1,7 @@
-from datetime import datetime
+from pandas import DatetimeIndex
 from btbox.share import Clock
 from btbox.broker import Broker
+from btbox.strategy.journal import Journal
 
 
 DEFAULT_CAPITAL = 1e6
@@ -18,15 +19,20 @@ class Strategy:
         self._broker = broker
         self._timeline = self._broker.timeline
         self._clock = clock
+        self._journal = Journal(self._clock, self._timeline)
         self._broker.order.deposit(self.capital)
 
     @property
-    def timeline(self) -> list[datetime]:
+    def timeline(self) -> DatetimeIndex:
         return self._timeline
 
     @property
     def broker(self) -> Broker:
         return self._broker
+
+    @property
+    def journal(self) -> Journal:
+        return self._journal
 
     def initial(self,
                 b: Broker) -> None:
