@@ -12,13 +12,13 @@ def cal_annualize_factor(timeline: DatetimeIndex) -> float:
 
 
 def make_random_ohlcv(
-    start: datetime,
-    end: datetime,
+    start: datetime | str,
+    end: datetime | str,
     freq: str = '1d',
     *,
-    p0: float,
-    mu: float,
-    sigma: float,
+    p0: float = 100,
+    mu: float = 0.0,
+    sigma: float = 0.10,
     max_vol_per_period: int = 1000000,
 ) -> DataFrame:
     dates = date_range(start, end, freq=freq).rename('Date')
