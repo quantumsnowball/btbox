@@ -11,20 +11,27 @@ from btbox.strategy.decorator import interval
 np.random.seed(99999)
 
 
-def test_make_random_ohlcv():
-    START = to_datetime('2020-01-01')
-    END = '2021-12-31'
-    dfs = [
-        make_random_ohlcv(START, END),
-        make_random_ohlcv(START, END, '1h'),
-        make_random_ohlcv(START, END, '1d', p0=10),
-        make_random_ohlcv(START, END, '1d', p0=10, mu=0.5),
-        make_random_ohlcv(START, END, '1d', p0=10, sigma=0.5),
-        make_random_ohlcv(START, END, '1d', p0=10, max_vol_per_period=20000),
-    ]
-    for df in dfs:
-        assert isinstance(df, DataFrame)
-        assert df.shape[1] == 5
+SYMBOL = 'DUMMY'
+START = to_datetime('2020-01-01')
+END = '2021-12-31'
+
+
+@pytest.mark.parametrize('df', [
+    make_random_ohlcv(START, END),
+    make_random_ohlcv(START, END, '1h'),
+    make_random_ohlcv(START, END, '1d', p0=10),
+    make_random_ohlcv(START, END, '1d', p0=10, mu=0.5),
+    make_random_ohlcv(START, END, '1d', p0=10, sigma=0.5),
+    make_random_ohlcv(START, END, '1d', p0=10, max_vol_per_period=20000),
+])
+def test_make_random_ohlcv(df):
+    class St(Strategy):
+        @interval(1)
+        def step(self, b: Broker):
+            pass
+    assert isinstance(df, DataFrame)
+    assert df.shape[1] == 5
+    btbox.create_job(St, {SYMBOL: df}).run()
 
 
 @pytest.mark.parametrize('mu,sigma', [
@@ -36,9 +43,6 @@ def test_make_random_ohlcv():
     (.20, .15),
 ])
 def test_dummy_backtest(mu, sigma):
-    SYMBOL = 'DUMMY'
-    START = to_datetime('2020-01-01')
-    END = '2021-12-31'
 
     df = make_random_ohlcv(START, END, mu=mu, sigma=sigma)
     assert isinstance(df, DataFrame)
