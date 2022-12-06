@@ -10,3 +10,4 @@ from btbox.job.utils import create_job
 from btbox.backtest.utils import create_backtest
 
 from btbox.datasource.utils import import_yahoo_csv
+from btbox.datasource.simulation import make_random_ohlcv
